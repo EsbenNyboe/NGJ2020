@@ -243,12 +243,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 568811066}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65ca8780ede3a3846ae0183694d1b7bb, type: 3}
+  m_Script: {fileID: 11500000, guid: 5fccebd5759d7774db7c6066b5ab4783, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 15.4
-  acceleration: 49
-  accType: 2
+  maxSpeed: 10
+  acceleration: 10
+  accType: 0
   maxSnapSpeed: 100
   probeDistance: 1
   gravityPercentage: 100
@@ -262,7 +262,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 568811066}
-  m_Material: {fileID: 13400000, guid: 2e70d1096ea32714f8cb3ae0ab11105e, type: 2}
+  m_Material: {fileID: 13400000, guid: a847bdba97b9c1345943f616ff4bf379, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -482,31 +482,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 666313249}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 703944c66d0bae84c99eeb5542bd9950, type: 3}
+  m_Script: {fileID: 11500000, guid: deeeae7abcea25d4a96d017976090ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   nameOfSound:
-  - soundFile: {fileID: 0}
-    enableParameters: 0
-    pitch:
-      minValue: 0
-      maxValue: 0
-    volume: 0
-    pitchRandomness: 0
-  - soundFile: {fileID: 0}
-    enableParameters: 0
-    pitch:
-      minValue: 0
-      maxValue: 0
-    volume: 0
-    pitchRandomness: 0
-  - soundFile: {fileID: 0}
-    enableParameters: 0
-    pitch:
-      minValue: 0
-      maxValue: 0
-    volume: 0
-    pitchRandomness: 0
   - soundFile: {fileID: 0}
     enableParameters: 0
     pitch:
@@ -617,14 +596,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1928121840}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d37c30086de15f47bf4722427534b75, type: 3}
+  m_Script: {fileID: 11500000, guid: 1fd5d4bc66574a84185cc0891c650481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 568811071}
   distanceToPlayer: 5
   useTwoSmoothZones: 0
-  smoothTypeInnerCircle: 3
-  smoothTypeOuterCircle: 2
+  smoothTypeInnerCircle: 0
+  smoothTypeOuterCircle: 0
   circleRadius: 1
   innerFollowSpeed: 5
   outerFollowSpeed: 5
