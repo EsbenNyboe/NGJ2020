@@ -3,7 +3,6 @@
 [RequireComponent(typeof(Camera))]
 public class OrbitCamera2 : MonoBehaviour
 {
-   
 
     public enum InnerSmoothingType
     {
