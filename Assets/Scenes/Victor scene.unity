@@ -681,7 +681,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distanceToTarget: 0
   distanceThreshold: 2
-  rotationSpeed: 10
+  rotationSpeed: 30
   liftHandSpeed: 5
   swatSpeed: 10
   swat: 0
