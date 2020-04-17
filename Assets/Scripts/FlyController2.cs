@@ -9,11 +9,18 @@ public class FlyController2 : MonoBehaviour
         noAcc, constAcc, LinAccBoost, QuadAccBoost
     }
 
+
     [SerializeField, Range(0f, 10f)]
     float maxSpeed = 0.10f;
 
     [SerializeField, Range(0f, 50f)]
     float acceleration = 0.10f;
+
+    [SerializeField, Range(0f, 10f)]
+    float maxYSpeed = 1f;
+
+    [SerializeField, Range(0f, 50f)]
+    float Yacceleration = 0.10f;
 
     [SerializeField]
     AccelerationType accType = default;
@@ -29,6 +36,7 @@ public class FlyController2 : MonoBehaviour
 
     float startAcceleration;
     float jumpInput;
+    float desiredVelocityY;
 
 
     Rigidbody body;
@@ -55,15 +63,17 @@ public class FlyController2 : MonoBehaviour
 
         if(Input.GetAxis("Jump") != 0)
         {
-            jumpInput = Input.GetAxis("Jump");
+            jumpInput = Input.GetAxis("Jump")*maxYSpeed;
         }
         else
         {
             jumpInput = 0;
         }
-        
+
 
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
+
+        flyAcceleration = playerInput.magnitude + jumpInput;
 
         desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * maxSpeed;
 
@@ -133,13 +143,19 @@ public class FlyController2 : MonoBehaviour
         }
         else
         {
-            flyAcceleration = accelerationScaled;
+            
+            print(flyAcceleration);
 
             float newXVelocity = Mathf.MoveTowards(currentXVelocity, desiredVelocity.x, accelerationScaled);
             float newZVelocity = Mathf.MoveTowards(currentZVelocity, desiredVelocity.z, accelerationScaled);
 
             velocity += xAxis * (newXVelocity - currentXVelocity) + zAxis * (newZVelocity - currentZVelocity);
 
+
+
+            velocity.y = Mathf.MoveTowards(velocity.y, jumpInput, Time.unscaledDeltaTime*Yacceleration*10f);
+
+            /*
             if (jumpInput != 0)
             {
                 velocity.y = jumpInput*Time.unscaledDeltaTime * 600;
@@ -153,7 +169,7 @@ public class FlyController2 : MonoBehaviour
             {
                 velocity.y -= 4f * Time.unscaledDeltaTime;
             }
-            
+            */
             
             
 
