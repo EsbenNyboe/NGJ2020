@@ -17,7 +17,8 @@ public class Hand : MonoBehaviour
     public bool swat;
     public bool coolDown;
     Vector3 swatPos;
-
+    float t;
+    Vector3 startPos;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,15 +45,36 @@ public class Hand : MonoBehaviour
         }
         if(swat)
         {
-            Vector3 targetDir = (swatPos - hand.position).normalized;
-
-            hand.position = hand.position + targetDir * swatSpeed * Time.deltaTime;
+            //Vector3 targetDir = (swatPos - hand.position).normalized;
+         
+            // hand.position = hand.position + targetDir * swatSpeed * Time.deltaTime;
+            t += swatSpeed * Time.deltaTime;
+            hand.position = BezierCurze(startPos, swatPos, t);
+            
+            if (Vector3.Distance(hand.position, swatPos) < 0.1)
+                hand.position = swatPos;
             StartCoroutine(SwatCoroutine());
         }
-
+      
         
     }
 
+    Vector3 BezierCurze(Vector3 a, Vector3 d , float t)
+    {
+        
+        Vector3 b = a + 1f * Vector3.up;
+        Vector3 c = d + +1f * Vector3.up;
+
+        Vector3 m = Vector3.Lerp(a, b, t);
+        Vector3 n = Vector3.Lerp(b, c, t);
+        Vector3 o = Vector3.Lerp(c, d, t);
+        Vector3 p = Vector3.Lerp(m, n, t);
+        Vector3 e = Vector3.Lerp(n, o, t);
+        Vector3 pointOnCurve = Vector3.Lerp(p, e, t);
+
+        return pointOnCurve;
+
+    }
     void LiftArm()
     {
        
@@ -60,10 +82,12 @@ public class Hand : MonoBehaviour
 
         hand.position = hand.position + readyDirNorm * liftHandSpeed * Time.deltaTime;
 
-        if(Vector3.Distance(hand.position, readyPos.position) < 0.05f) //magic number indtil videre
+        if(Vector3.Distance(hand.position, readyPos.position) < 0.05f && !swat) //magic number indtil videre
         {
             swat = true;
             swatPos = target.position;
+            startPos = hand.position;
+            t = 0;
         }
     }
     IEnumerator SwatCoroutine()
