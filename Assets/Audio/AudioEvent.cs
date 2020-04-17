@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioEvent : MonoBehaviour
+public class AudioEvent: MonoBehaviour
 {
     private AudioSource voice;
     private int selectedFile;
@@ -12,8 +12,9 @@ public class AudioEvent : MonoBehaviour
     {
         public AudioClip soundFile;
         public bool enableParameters;
-        [MinMaxRange(0.5f, 2)]
+        [MinMaxRange(1, 2)]
         public RangedFloat pitch;
+        [Range(0, 1)]
         public float volume;
     }
     public Sound[] sound;
@@ -23,8 +24,12 @@ public class AudioEvent : MonoBehaviour
         voice = GetComponent<AudioSource>();
     }
 
-    public void PlayTheSound()
+    public void PlayTheSound(AudioSource audioSource)
     {
+        if (audioSource != null)
+        {
+            voice = audioSource;
+        }
         selectedFile = Random.Range(0, sound.Length);
         voice.clip = sound[selectedFile].soundFile;
 

@@ -485,7 +485,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deeeae7abcea25d4a96d017976090ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sound: []
+  sound:
+  - soundFile: {fileID: 8300000, guid: 602cbb81b2b5f33499d4a01119170124, type: 3}
+    enableParameters: 1
+    pitch:
+      minValue: 1.4851309
+      maxValue: 1.5827786
+    volume: 0.629
+  - soundFile: {fileID: 8300000, guid: 919804e19928df740882b28f81ec9396, type: 3}
+    enableParameters: 1
+    pitch:
+      minValue: 1.3122503
+      maxValue: 1.7117177
+    volume: 0.831
+  - soundFile: {fileID: 8300000, guid: 3485a0ab9a9b0cf42ac56f834fd20ea3, type: 3}
+    enableParameters: 1
+    pitch:
+      minValue: 1.0887705
+      maxValue: 2
+    volume: 0.489
 --- !u!1 &1928121840
 GameObject:
   m_ObjectHideFlags: 0
