@@ -20,12 +20,21 @@ public class FlyBuzz : MonoBehaviour
         vel = FlyController2.flyVelocity;
 
         audioSource.pitch = 1 + lerpin.y;
-        
-        lerpin = Vector3.Lerp(lerpin, vel, 0.001f);
+
+        if (audioSource.pitch > 1.4f)
+        {
+            audioSource.pitch = 1.4f;
+        }
+        if (audioSource.pitch < 0.7f)
+        {
+            audioSource.pitch = 0.7f;
+        }
+
+        lerpin = Vector3.Lerp(lerpin, vel, 0.0001f);
         Debug.Log("Lerp: " + lerpin.y);
 //        Debug.Log("speed: " + FlyController2.speed);
-        Debug.Log("velx: " + vel.x);
         Debug.Log("vely: " + vel.y);
-        Debug.Log("velz: " + vel.z);
+
+        Debug.Log("acc: " + FlyController2.flyAcceleration);
     }
 }
