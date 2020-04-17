@@ -20,6 +20,8 @@ public class FlyController2 : MonoBehaviour
 
     Vector3 velocity, desiredVelocity;
 
+    public static Vector3 flyVelocity;
+
     public static float speed = 0;
 
     Vector3 forwardDir;
@@ -37,6 +39,7 @@ public class FlyController2 : MonoBehaviour
         body = GetComponent<Rigidbody>();
         startAcceleration = acceleration;
         cam = Camera.main;
+        flyVelocity = Vector3.zero;
     }
 
     void Update()
@@ -46,6 +49,7 @@ public class FlyController2 : MonoBehaviour
         playerInput.y = Input.GetAxisRaw("Vertical");
 
         speed = body.velocity.magnitude;
+        flyVelocity = body.velocity;
 
         if(Input.GetAxis("Jump") != 0)
         {
