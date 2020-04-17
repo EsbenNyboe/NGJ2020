@@ -61,7 +61,7 @@ public class newCamera : MonoBehaviour
         // If Control and Alt and Middle button? ZOOM!
         if (Input.GetMouseButton(2) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(KeyCode.LeftControl))
         {
-            desiredDistance -= Input.GetAxis("Mouse Y") * Time.deltaTime * zoomRate * 0.125f * Mathf.Abs(desiredDistance);
+            desiredDistance -= Input.GetAxis("Mouse Y") * Time.unscaledDeltaTime * zoomRate * 0.125f * Mathf.Abs(desiredDistance);
         }
 
         // If middle mouse and left alt are selected? ORBIT
@@ -78,7 +78,7 @@ public class newCamera : MonoBehaviour
             desiredRotation = Quaternion.Euler(yDeg, xDeg, 0);
             currentRotation = transform.rotation;
 
-            rotation = Quaternion.Lerp(currentRotation, desiredRotation, Time.deltaTime * zoomDampening);
+            rotation = Quaternion.Lerp(currentRotation, desiredRotation, Time.unscaledDeltaTime * zoomDampening);
             transform.rotation = rotation;
         }
         // otherwise if middle mouse is selected, we pan by way of transforming the target in screenspace
@@ -86,11 +86,11 @@ public class newCamera : MonoBehaviour
         ////////Orbit Position
 
         // affect the desired Zoom distance if we roll the scrollwheel
-        desiredDistance -= Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * zoomRate * Mathf.Abs(desiredDistance);
+        desiredDistance -= Input.GetAxis("Mouse ScrollWheel") * Time.unscaledDeltaTime * zoomRate * Mathf.Abs(desiredDistance);
         //clamp the zoom min/max
         desiredDistance = Mathf.Clamp(desiredDistance, minDistance, maxDistance);
         // For smoothing of the zoom, lerp distance
-        currentDistance = Mathf.Lerp(currentDistance, desiredDistance, Time.deltaTime * zoomDampening);
+        currentDistance = Mathf.Lerp(currentDistance, desiredDistance, Time.unscaledDeltaTime * zoomDampening);
 
         // calculate position based on the new currentDistance 
         position = target.position - (rotation * Vector3.forward * currentDistance + targetOffset);
