@@ -9,10 +9,10 @@ public class FlyController2 : MonoBehaviour
         noAcc, constAcc, LinAccBoost, QuadAccBoost
     }
 
-    [SerializeField, Range(0f, 1f)]
+    [SerializeField, Range(0f, 10f)]
     float maxSpeed = 0.10f;
 
-    [SerializeField, Range(0f, 5f)]
+    [SerializeField, Range(0f, 50f)]
     float acceleration = 0.10f;
 
     [SerializeField]
@@ -21,6 +21,7 @@ public class FlyController2 : MonoBehaviour
     Vector3 velocity, desiredVelocity;
 
     public static Vector3 flyVelocity;
+    public static float flyAcceleration;
 
     public static float speed = 0;
 
@@ -29,10 +30,11 @@ public class FlyController2 : MonoBehaviour
     float startAcceleration;
     float jumpInput;
 
-    int stepsSinceLastGrounded, stepsSinceLastJump;
 
     Rigidbody body;
     Camera cam;
+
+    bool turnFly = false;
 
     void Awake()
     {
@@ -67,9 +69,10 @@ public class FlyController2 : MonoBehaviour
 
         if (Input.GetMouseButton(1))
         {
-            forwardDir = Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up);
-            transform.forward = forwardDir;
+            turnFly = true;
+            
         }
+        else { turnFly = false; }
 
 
     }
@@ -77,17 +80,19 @@ public class FlyController2 : MonoBehaviour
     private void FixedUpdate()
     {
         MoveSphere();
+        if (turnFly)
+        {
+            forwardDir = Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up);
+            transform.forward = forwardDir;
 
+        }
+        
         UpdateState();
     }
 
     private void UpdateState()
     {
-        stepsSinceLastGrounded += 1;
-        stepsSinceLastJump += 1;
-
         body.velocity = velocity;
-
     }
 
     private void MoveSphere()
@@ -101,13 +106,13 @@ public class FlyController2 : MonoBehaviour
         switch (accType)
         {
             case AccelerationType.constAcc:
-                accelerationScaled = acceleration * Time.deltaTime;
+                accelerationScaled = acceleration * Time.unscaledDeltaTime;
                 break;
             case AccelerationType.LinAccBoost:
-                accelerationScaled = acceleration * (0.1f + 5 * Vector3.Distance(desiredVelocity, velocity) / (maxSpeed * 2)) * Time.deltaTime;
+                accelerationScaled = acceleration * (0.1f + 5 * Vector3.Distance(desiredVelocity, velocity) / (maxSpeed * 2)) * Time.unscaledDeltaTime;
                 break;
             case AccelerationType.QuadAccBoost:
-                accelerationScaled = 5 * acceleration * (0.1f + 10 * Mathf.Pow(Vector3.Distance(desiredVelocity, velocity) / (maxSpeed * 2), 4)) * Time.deltaTime;
+                accelerationScaled = 5 * acceleration * (0.1f + 10 * Mathf.Pow(Vector3.Distance(desiredVelocity, velocity) / (maxSpeed * 2), 4)) * Time.unscaledDeltaTime;
                 break;
             case AccelerationType.noAcc:
                 accelerationScaled = 0;
@@ -128,6 +133,8 @@ public class FlyController2 : MonoBehaviour
         }
         else
         {
+            flyAcceleration = accelerationScaled;
+
             float newXVelocity = Mathf.MoveTowards(currentXVelocity, desiredVelocity.x, accelerationScaled);
             float newZVelocity = Mathf.MoveTowards(currentZVelocity, desiredVelocity.z, accelerationScaled);
 
@@ -135,16 +142,16 @@ public class FlyController2 : MonoBehaviour
 
             if (jumpInput != 0)
             {
-                velocity.y = jumpInput*Time.deltaTime * 60;
+                velocity.y = jumpInput*Time.unscaledDeltaTime * 600;
             }
 
             if(velocity.y > 0)
             {
-                velocity.y -= 7f * Time.deltaTime;
+                velocity.y -= 70f * Time.unscaledDeltaTime;
             }
             else
             {
-                velocity.y -= 0.4f * Time.deltaTime;
+                velocity.y -= 4f * Time.unscaledDeltaTime;
             }
             
             
@@ -152,4 +159,5 @@ public class FlyController2 : MonoBehaviour
 
         }
     }
+
 }
