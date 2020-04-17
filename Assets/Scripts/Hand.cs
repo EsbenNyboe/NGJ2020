@@ -31,9 +31,16 @@ public class Hand : MonoBehaviour
     void Update()
     {
         distanceToTarget = Vector3.Distance(target.position, spine.position);
-        if(distanceToTarget< distanceThreshold && !coolDown)
+        if(distanceToTarget< distanceThreshold)
         {
-            RotateBodyAndLiftArm();
+            // The step size is equal to speed times frame time.
+            var step = rotationSpeed * Time.deltaTime;
+
+            Quaternion newRotation = Quaternion.LookRotation(spine.position - target.position);
+            // Rotate our transform a step closer to the target's.
+            spine.rotation = Quaternion.RotateTowards(spine.rotation, newRotation, step);
+            if(!coolDown)
+            LiftArm();
         }
         if(swat)
         {
@@ -46,14 +53,9 @@ public class Hand : MonoBehaviour
         
     }
 
-    void RotateBodyAndLiftArm()
+    void LiftArm()
     {
-        // The step size is equal to speed times frame time.
-        var step = rotationSpeed * Time.deltaTime;
-
-        // Rotate our transform a step closer to the target's.
-        spine.rotation = Quaternion.RotateTowards(transform.rotation, target.rotation, step);
-
+       
         Vector3 readyDirNorm =(readyPos.position - hand.position).normalized;
 
         hand.position = hand.position + readyDirNorm * liftHandSpeed * Time.deltaTime;
