@@ -16,6 +16,7 @@ public class Hand : MonoBehaviour
     public float swatSpeed;
     public bool swat;
     public bool coolDown;
+  
     Vector3 swatPos;
     float t;
     Vector3 startPos;
@@ -46,20 +47,29 @@ public class Hand : MonoBehaviour
         if(swat)
         {
             //Vector3 targetDir = (swatPos - hand.position).normalized;
-         
+
             // hand.position = hand.position + targetDir * swatSpeed * Time.deltaTime;
+
             t += swatSpeed * Time.deltaTime;
-            hand.position = BezierCurze(startPos, swatPos, t);
-            
+           
+            hand.position = BezierCurze(startPos, swatPos, t*t);
+
             if (Vector3.Distance(hand.position, swatPos) < 0.1)
+            {
                 hand.position = swatPos;
-            StartCoroutine(SwatCoroutine());
+               
+                startPos = hand.position;
+                StartCoroutine(SwatCoroutine());
+            }
+         
+
         }
+      
       
         
     }
 
-    Vector3 BezierCurze(Vector3 a, Vector3 d , float t)
+    Vector3 BezierCurze(Vector3 a, Vector3 d , float t) // kan optimereres
     {
         
         Vector3 b = a + 1f * Vector3.up;
@@ -96,8 +106,10 @@ public class Hand : MonoBehaviour
         yield return new WaitForSeconds(2); //magic number
         swat = false;
         coolDown = true;
+       
         yield return new WaitForSeconds(2);
         coolDown = false;
+        
     }
  
 }
