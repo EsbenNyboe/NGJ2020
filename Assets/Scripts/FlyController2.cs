@@ -129,7 +129,7 @@ public class FlyController2 : MonoBehaviour
             currentStamina = Mathf.Clamp(currentStamina - Time.unscaledDeltaTime / staminaFlyTime, 0, 1);
         }
 
-        print(currentStamina);
+       // print(currentStamina);
 
         Grounding();
 
