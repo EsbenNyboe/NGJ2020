@@ -55,8 +55,6 @@ public class FlyController2 : MonoBehaviour
     public static bool grounded = false;
 
 
-    public Transform test;
-
     void Awake()
     {
         body = GetComponent<Rigidbody>();
@@ -135,8 +133,7 @@ public class FlyController2 : MonoBehaviour
             currentStamina = Mathf.Clamp(currentStamina - Time.unscaledDeltaTime / staminaFlyTime, 0, 1);
         }
 
-        print(currentStamina);
-
+        
         Grounding();
 
         MoveSphere();
@@ -173,12 +170,9 @@ public class FlyController2 : MonoBehaviour
 
                 landedForward = -transform.right;
 
-                
                 grounded = true;
             }
-                Debug.DrawRay(transform.position, dir*0.02f, Color.red);
         }
-
     }
 
     private void UpdateState()
@@ -308,7 +302,7 @@ public class FlyController2 : MonoBehaviour
 
             Debug.DrawRay(transform.position, hit.normal);
             Debug.DrawRay(transform.position, landedForward, Color.yellow);
-            test.localRotation = landedOrientation;
+            
         }
         else
         {
@@ -359,7 +353,7 @@ public class FlyController2 : MonoBehaviour
 
         yDiff = jumpInput*maxYSpeed - velocity.y;
 
-        if (desiredVelocityY == 0)
+        if (desiredVelocity.y == 0)
         {
             yDiff = 0;
         }
