@@ -31,10 +31,10 @@ public class FlyBuzz : MonoBehaviour
         }
 
         lerpin = Vector3.Lerp(lerpin, vel, 0.0001f);
-        Debug.Log("Lerp: " + lerpin.y);
+//        Debug.Log("Lerp: " + lerpin.y);
 //        Debug.Log("speed: " + FlyController2.speed);
-        Debug.Log("vely: " + vel.y);
+//        Debug.Log("vely: " + vel.y);
 
-        Debug.Log("acc: " + FlyController2.flyAcceleration);
+//        Debug.Log("acc: " + FlyController2.flyAcceleration);
     }
 }
