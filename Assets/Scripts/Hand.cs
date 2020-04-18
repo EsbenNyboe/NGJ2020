@@ -30,6 +30,8 @@ public class Hand : MonoBehaviour
     public float swatTime;
     public float cooldownTime;
     Projector shadow;
+    Transform restPos;
+   public bool resetting;
    
     // Start is called before the first frame update
     void Start()
@@ -40,6 +42,7 @@ public class Hand : MonoBehaviour
         readyPosVert = GameObject.FindObjectOfType<readyPos>().GetComponent<Transform>();
         readyPosHori = GameObject.FindObjectOfType<readyPosHorizontal>().GetComponent<Transform>();
         lastFramePos = hand.position;
+        restPos = GameObject.FindObjectOfType<restPos>().GetComponent<Transform>();
         fly = GameObject.FindObjectOfType<FlyController2>();
         shadow = gameObject.GetComponentInChildren<Projector>();
     }
@@ -50,63 +53,89 @@ public class Hand : MonoBehaviour
         shadow.transform.LookAt(target.transform);
         distanceToTarget = Vector3.Distance(target.position, spine.position);
         shadow.orthographicSize = 10f - distanceToTarget;
-        if(distanceToTarget< distanceThreshold)
+        
+        if (resetting)
         {
-            // The step size is equal to speed times frame time.
-            var step = rotationSpeed *attackTimeModifier * Time.unscaledDeltaTime;
-
-            Quaternion newRotation = Quaternion.LookRotation(spine.position - target.position);
-            // Rotate our transform a step closer to the target's.
-            spine.rotation = Quaternion.RotateTowards(spine.rotation, newRotation, step);
-            if(!coolDown)
-            LiftArm();
-        }
-        if(swat)
-        {
-            //Vector3 targetDir = (swatPos - hand.position).normalized;
-
-            // hand.position = hand.position + targetDir * swatSpeed * Time.deltaTime;
             hand.right = -(hand.position - lastFramePos);
-            
-            if(Vector3.Distance(target.position, hand.position) > homingUntilDistance && !reachedTarget)
+            t += liftHandSpeed * attackTimeModifier * Time.unscaledDeltaTime;
+            hand.position = BezierCurve(startPos, restPos.position, t * t);
+            if(Vector3.Distance(restPos.position, hand.position) < 0.5f)
             {
-                swatPos = target.position;
-                overShoot = target.position + (target.position - hand.position).normalized;
+                resetting = false;
             }
-           
-                t += swatSpeed *attackTimeModifier * Time.unscaledDeltaTime;
-            if (currentReadyPos == readyPosVert ) //Vertical curves
+        }
+        else
+        {
+
+            if (distanceToTarget < distanceThreshold)
             {
-                if (!reachedTarget)
-                    hand.position = BezierCurve(startPos, swatPos, t * t);
-                else
-                    hand.position = BezierCurve2(swatPos, overShoot, 2 * t);
+                // The step size is equal to speed times frame time.
+                var step = rotationSpeed * attackTimeModifier * Time.unscaledDeltaTime;
+
+                Quaternion newRotation = Quaternion.LookRotation(spine.position - target.position);
+                // Rotate our transform a step closer to the target's.
+                spine.rotation = Quaternion.RotateTowards(spine.rotation, newRotation, step);
+                if (!coolDown)
+                    LiftArm();
             }
-            else if(currentReadyPos == readyPosHori) //Horizontal curves
+            if (swat)
             {
-                if (!reachedTarget)
-                    hand.position = BezierCurve3(startPos, swatPos, t * t);
-                else
-                    hand.position = BezierCurve2(swatPos, overShoot, 2 * t);
-            }
+                //Vector3 targetDir = (swatPos - hand.position).normalized;
+
+                // hand.position = hand.position + targetDir * swatSpeed * Time.deltaTime;
+                hand.right = -(hand.position - lastFramePos);
+
+                if (Vector3.Distance(target.position, hand.position) > homingUntilDistance && !reachedTarget)
+                {
+                    swatPos = target.position;
+                    overShoot = target.position + (target.position - hand.position).normalized;
+                }
+
+                t += swatSpeed * attackTimeModifier * Time.unscaledDeltaTime;
+                if (currentReadyPos == readyPosVert) //Vertical curves
+                {
+                    if (!reachedTarget)
+                        hand.position = BezierCurve(startPos, swatPos, t * t);
+                    else
+                        hand.position = BezierCurve2(swatPos, overShoot, 2 * t);
+                }
+                else if (currentReadyPos == readyPosHori) //Horizontal curves
+                {
+                    if (!reachedTarget)
+                        hand.position = BezierCurve3(startPos, swatPos, t * t);
+                    else
+                        hand.position = BezierCurve2(swatPos, overShoot, 2 * t);
+                }
                 if (Vector3.Distance(hand.position, swatPos) < 0.1f && !reachedTarget)
                 {
 
-                // hand.position = swatPos;
-                   // startPos = swatPos;
+                    // hand.position = swatPos;
+                    // startPos = swatPos;
                     //swatPos = overShoot;
-                reachedTarget = true;
-                t = 0;
-               
+                    reachedTarget = true;
+                    t = 0;
+                    StartCoroutine(SwatCoroutine());
                 }
-            
-        
-            StartCoroutine(SwatCoroutine());
 
+               
+
+            }
         }
-
         lastFramePos = hand.position;
         
+    }
+    public void OnCollisionEnter(Collision collision)
+    {
+      
+        if (collision.gameObject.isStatic && !resetting)
+        {
+            print("collisiop");
+            t = 0;
+            resetting = true;
+            startPos = hand.position;
+            StartCoroutine(CoolDownCoroutine());   
+        }
+      
     }
 
     Vector3 BezierCurve(Vector3 a, Vector3 d , float t) // kan optimereres
@@ -202,14 +231,19 @@ public class Hand : MonoBehaviour
         
         float scale = Time.timeScale;
         yield return new WaitForSeconds((swatTime/attackTimeModifier)*scale); //magic number
+        StartCoroutine(CoolDownCoroutine());
+
+    }
+    IEnumerator CoolDownCoroutine()
+    {
+        //startPos = hand.position;
+        float scale = Time.timeScale;
         swat = false;
         reachedTarget = false;
         coolDown = true;
-       
-        yield return new WaitForSeconds((cooldownTime/attackTimeModifier)*scale);
+
+        yield return new WaitForSeconds((cooldownTime / attackTimeModifier) * scale);
         coolDown = false;
-        
-        
     }
- 
+
 }
