@@ -25,7 +25,13 @@ public class FlyController2 : MonoBehaviour
     [SerializeField]
     AccelerationType accType = default;
 
-    public float maxStamina = 5;
+    [SerializeField]
+    public float staminaChargeTime = 4f;
+
+    [SerializeField]
+    public float staminaFlyTime = 20f;
+
+    public static float currentStamina = 1f;
     
     public Transform flyBody;
     
@@ -60,6 +66,15 @@ public class FlyController2 : MonoBehaviour
 
         speed = body.velocity.magnitude;
         flyVelocity = body.velocity;
+
+        if(currentStamina == 0)
+        {
+            GetComponentInChildren<Renderer>().material.SetColor("_Color", Color.red);
+        }
+        else
+        {
+            GetComponentInChildren<Renderer>().material.SetColor("_Color", Color.green);
+        }
     }
 
     private void HandleInput()
@@ -70,9 +85,13 @@ public class FlyController2 : MonoBehaviour
 
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
 
-        if (grounded)
+        if (grounded )
         {
             desiredVelocity = Vector3.zero;
+        }
+        else if(currentStamina == 0)
+        {
+            desiredVelocity = 0.1f* new Vector3(playerInput.x, 0f, playerInput.y) * maxSpeed;
         }
         else
         {
@@ -102,6 +121,16 @@ public class FlyController2 : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (grounded)
+        {
+            currentStamina = Mathf.Clamp(currentStamina + Time.unscaledDeltaTime / staminaChargeTime,0,1);
+        }else
+        {
+            currentStamina = Mathf.Clamp(currentStamina - Time.unscaledDeltaTime / staminaFlyTime, 0, 1);
+        }
+
+        print(currentStamina);
+
         Grounding();
 
         MoveSphere();
@@ -117,8 +146,9 @@ public class FlyController2 : MonoBehaviour
 
     private void Grounding()
     {
+
         grounded = false;
-        GetComponentInChildren<Renderer>().material.SetColor("_Color", Color.red);
+        
 
         for (int i = 0; i < 24; i++)
         {
@@ -133,11 +163,11 @@ public class FlyController2 : MonoBehaviour
 
             if(Physics.Raycast(transform.position, dir, out hit, 0.03f) && grounded == false)
             {
-                print(hit.normal*100);
+                //print(hit.normal*100);
 
                 landedForward = -transform.right;
 
-                GetComponentInChildren<Renderer>().material.SetColor("_Color", Color.green);
+                
                 grounded = true;
             }
                 Debug.DrawRay(transform.position, dir*0.02f, Color.red);
@@ -199,6 +229,12 @@ public class FlyController2 : MonoBehaviour
 
     private void CalculateXZVelocity(float accelerationScaled, Vector3 zAxis, Vector3 xAxis, float currentXVelocity, float currentZVelocity)
     {
+        if (currentStamina == 0)
+        {
+            desiredVelocity.x += 3 * (Mathf.PerlinNoise(68, 11562 + Time.time * 2000 * Time.unscaledDeltaTime) - 0.5f);
+            desiredVelocity.z += 3 * (Mathf.PerlinNoise(68, -2462 + Time.time * 3000 * Time.unscaledDeltaTime) - 0.5f);
+        }
+
         float newXVelocity = Mathf.MoveTowards(currentXVelocity, desiredVelocity.x, accelerationScaled);
         float newZVelocity = Mathf.MoveTowards(currentZVelocity, desiredVelocity.z, accelerationScaled);
 
@@ -209,7 +245,7 @@ public class FlyController2 : MonoBehaviour
     {
         //float cameraAngleCompensation = Vector3.Cross(cam.transform.forward, transform.forward).magnitude;
 
-        if (jumpInput != 0 && velocity.y != 0)
+        if (jumpInput != 0 && velocity.y != 0 && currentStamina != 0)
         {
             velocity.y = Mathf.MoveTowards(velocity.y, Mathf.Clamp(jumpInput, -1, 1) * maxYSpeed, Time.unscaledDeltaTime * Yacceleration * 10f);
 
@@ -217,15 +253,33 @@ public class FlyController2 : MonoBehaviour
         }
         else if (velocity.y > 0)
         {
-            //velocity.y -= Time.unscaledDeltaTime*4;
+            //ingen stamina: daler ned. TIL ALLE SIDER!
+            //
             velocity.y += 0.1f * (Mathf.PerlinNoise(68, 562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
-            velocity.y *= 0.97f;
+
+            if(currentStamina == 0)
+            {
+            velocity.y -= Time.unscaledDeltaTime * 4 + 0.1f*(Mathf.PerlinNoise(68, 1562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
+            }
+            else
+            {
+                velocity.y *= 0.97f;
+            }
+
         }
         else
         {
             velocity.y -= Time.unscaledDeltaTime * 0.2f;
             velocity.y += 0.1f * (Mathf.PerlinNoise(68, 562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
-            velocity.y *= 0.97f;
+
+            if (currentStamina == 0)
+            {
+                velocity.y -= Time.unscaledDeltaTime * 2;
+            }
+            else
+            {
+                velocity.y *= 0.97f;
+            }
         }
     }
 
@@ -240,7 +294,7 @@ public class FlyController2 : MonoBehaviour
         if (grounded)
         {
             Quaternion landedOrientation = Quaternion.LookRotation(landedForward, hit.normal); //mærkelig "forward" fordi fluen vender mærkeligt (langs +x)
-            print(hit.normal);
+            //print(hit.normal);
 
             desiredAngleX = landedOrientation.eulerAngles.x;
             desiredAngleY = body.transform.localRotation.y - 90;
