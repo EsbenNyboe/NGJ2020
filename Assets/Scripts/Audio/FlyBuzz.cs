@@ -8,69 +8,131 @@ public class FlyBuzz : MonoBehaviour
     float pitch;
     Vector3 vel;
     Vector3 acc;
-    Vector3 lerpin;
 
-    float pitchingYspeed;
-    float pitchingZspeed;
-    float pitchingAccX;
-    float pitching;
+    float pitchingVel;
+    [Range(1, 10)]
+    public float pitchingVelPower;
 
-    // Start is called before the first frame update
+    float pitchingAcc;
+    [Range(1, 10)]
+    public float pitchingAccPower;
+    
+    [MinMaxRange(-0.5f, 0)]
+    public RangedFloat resetBottom;
+    private float resetBottomChosen;
+    [MinMaxRange(0, 0.2f)]
+    public RangedFloat resetTop;
+    private float resetTopChosen;
+    public float resetSlope;
+    public float resetTime;
+    private float timeSinceReset;
+
+    public float volume;
+    public float fadeSlope;
+
+    private bool isGrounded;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        timeSinceReset = resetTime;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        vel = FlyController2.flyVelocity;
-        acc = FlyController2.flyAcceleration;
+        timeSinceReset += Time.deltaTime * 10;
+        MacroPitching();
+        LimitPitchMinMaxValues(0.7f, 1.4f);
+        MicroPitching();
+        LimitPitchMinMaxValues(0.7f, 1.5f);
+
+        SwitchingStatesSmoothly(); // grounding and ungrounding smoothly
         audioSource.pitch = pitch;
 
-        if (audioSource.pitch > 1.4f)
+        if (Input.GetKeyDown(KeyCode.F)) 
         {
-            audioSource.pitch = 1.4f;
+            StateChangeFlying();
         }
-        if (audioSource.pitch < 0.7f)
+        if (Input.GetKeyDown(KeyCode.G)) 
         {
-            audioSource.pitch = 0.7f;
-        }
-
-        Oldie();
-//        NewFailOfTiredness();
-
-    }
-
-    private void NewFailOfTiredness()
-    {
-        pitchingYspeed = Mathf.Lerp(pitchingYspeed, vel.y, 0.0001f);
-        pitch = 1 + pitchingYspeed;
-        //UpdatePitching(pitchingYspeed, -1f, 2);
-        pitchingZspeed = Mathf.Lerp(pitchingZspeed, vel.z, 0.0001f);
-//        pitch = Mathf.Lerp(pitch, pitchingZspeed, 0.);
-            //UpdatePitching(pitchingZspeed, -1, 2);
-        pitchingAccX = Mathf.Lerp(pitchingAccX, acc.x, 0.005f);
-        UpdatePitching(pitchingAccX, -1, 2);
-
-
-        //        pitch = 1 + pitchingYspeed + pitchingZspeed + pitchingAccX;
-    }
-
-    private void UpdatePitching(float pitchingParameter, float pitchMin, float pitchMax)
-    {
-        pitching = Mathf.Lerp(pitching, pitchingParameter, 0.5f);
-       
-        if (pitchingParameter > pitchMin && pitchingParameter < pitchMax)
-        {
-            
+            StateChangeGrounded();
         }
     }
 
-    private void Oldie()
+    private void SwitchingStatesSmoothly()
     {
-        lerpin = Vector3.Lerp(lerpin, vel, 0.0001f);
-        pitch = 1 + lerpin.y;
-        pitch = Mathf.Lerp(pitch, (acc.x + acc.z), 0.005f);
+        if (audioSource.volume > 0 && isGrounded == true)
+        {
+            audioSource.volume -= fadeSlope;
+        }
+        if (audioSource.volume < volume && isGrounded == false)
+        {
+            audioSource.volume += fadeSlope;
+        }
+    }    
+
+    public void StateChangeFlying() // run this when fly starts flying
+    {
+        isGrounded = false;
+        audioSource.volume = volume;
+        ResetPitch();
+        //audioSource.UnPause();
+    }
+
+    public void StateChangeGrounded() // run this when fly stops flying
+    {
+        isGrounded = true;
+        //audioSource.Pause();
+    }
+
+    private void ResetPitch()
+    {
+        resetBottomChosen = Random.Range(resetBottom.minValue, resetBottom.maxValue);
+        resetTopChosen = Random.Range(resetTop.minValue, resetTop.maxValue);
+        pitchingVel = resetBottomChosen*Random.Range(0.9f, 1.2f);
+        timeSinceReset = 0;
+    }
+
+    private void LimitPitchMinMaxValues(float minPitch, float maxPitch)
+    {
+        if (pitch < minPitch)
+        {
+            pitch = minPitch;
+        }
+        if (pitch > maxPitch)
+        {
+            pitch = maxPitch;
+        }
+    }
+
+    private void MacroPitching()
+    {
+        vel = FlyController2.flyVelocity;
+
+        if (timeSinceReset < resetTime)
+        {
+            float resetAffect = pitchingVelPower * resetSlope * (resetTopChosen - pitchingVel);
+            pitchingVel = Mathf.Lerp(pitchingVel, vel.y, resetAffect * 0.00001f); 
+        }
+        else
+        {
+            pitchingVel = Mathf.Lerp(pitchingVel, vel.y, pitchingVelPower * 0.00001f);
+        }
+
+        pitch = 1 + pitchingVel;
+    }
+
+    private void MicroPitching()
+    {
+        acc = FlyController2.flyAcceleration;
+        if (acc.x > acc.y)
+        {
+            pitchingAcc = acc.x;
+        }
+        else
+        {
+            pitchingAcc = acc.y;
+        }
+        pitch = Mathf.Lerp(pitch, pitchingAcc, pitchingAccPower*0.001f);
     }
 }
