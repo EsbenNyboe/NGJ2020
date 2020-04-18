@@ -8,7 +8,8 @@ public class Hand : MonoBehaviour
     Transform hand;
     Transform spine;
     Transform target;
-    Transform readyPos;
+    Transform readyPosVert;
+    Transform readyPosHori;
     public float distanceToTarget;
     public float distanceThreshold;
     public float rotationSpeed;
@@ -21,16 +22,20 @@ public class Hand : MonoBehaviour
     float t;
     Vector3 startPos;
     Vector3 overShoot;
-
+    Vector3 currentReadyPos;
     Vector3 lastFramePos;
+    FlyController2 fly;
     // Start is called before the first frame update
     void Start()
     {
         hand = gameObject.GetComponent<Transform>();
         spine = GameObject.FindObjectOfType<Spine>().GetComponent<Transform>();
         target = GameObject.FindObjectOfType<Target>().GetComponent<Transform>();
-        readyPos = GameObject.FindObjectOfType<readyPos>().GetComponent<Transform>();
+        readyPosVert = GameObject.FindObjectOfType<readyPos>().GetComponent<Transform>();
+        readyPosHori = GameObject.FindObjectOfType<readyPosHorizontal>().GetComponent<Transform>();
         lastFramePos = hand.position;
+        fly = GameObject.FindObjectOfType<FlyController2>();
+
     }
 
     // Update is called once per frame
@@ -58,11 +63,20 @@ public class Hand : MonoBehaviour
 
            
                 t += swatSpeed * Time.unscaledDeltaTime;
-
-            if (!reachedTarget)
-                hand.position = BezierCurve(startPos, swatPos, t * t);
-            else
-                hand.position = BezierCurve2(swatPos, overShoot, 2*t);
+            if (currentReadyPos == readyPosVert.position ) //Vertical curves
+            {
+                if (!reachedTarget)
+                    hand.position = BezierCurve(startPos, swatPos, t * t);
+                else
+                    hand.position = BezierCurve2(swatPos, overShoot, 2 * t);
+            }
+            else //Horizontal curves
+            {
+                if (!reachedTarget)
+                    hand.position = BezierCurve3(startPos, swatPos, t * t);
+                else
+                    hand.position = BezierCurve2(swatPos, overShoot, 2 * t);
+            }
                 if (Vector3.Distance(hand.position, swatPos) < 0.1f && !reachedTarget)
                 {
 
@@ -115,14 +129,36 @@ public class Hand : MonoBehaviour
         return pointOnCurve;
 
     }
+    Vector3 BezierCurve3(Vector3 a, Vector3 d, float t) // kan optimereres
+    {
+
+        Vector3 b = a + -1f * Vector3.left;
+        Vector3 c = d + -1f * Vector3.left;
+
+        Vector3 m = Vector3.Lerp(a, b, t);
+        Vector3 n = Vector3.Lerp(b, c, t);
+        Vector3 o = Vector3.Lerp(c, d, t);
+        Vector3 p = Vector3.Lerp(m, n, t);
+        Vector3 e = Vector3.Lerp(n, o, t);
+        Vector3 pointOnCurve = Vector3.Lerp(p, e, t);
+
+        return pointOnCurve;
+
+    }
     void LiftArm()
     {
-       
-        Vector3 readyDirNorm =(readyPos.position - hand.position).normalized;
+        Vector3 readyDirNorm;
+        
+        if (FlyController2.grounded == true) // Vertical swat
+            currentReadyPos = readyPosVert.position;
+        else //Horizontal swat
+            currentReadyPos = readyPosHori.position;
+
+            readyDirNorm = (currentReadyPos - hand.position).normalized;
 
         hand.position = hand.position + readyDirNorm * liftHandSpeed * Time.unscaledDeltaTime;
 
-        if(Vector3.Distance(hand.position, readyPos.position) < 0.05f && !swat) //magic number indtil videre
+        if(Vector3.Distance(hand.position, currentReadyPos) < 0.05f && !swat) //magic number indtil videre
         {
             swat = true;
             swatPos = target.position;
