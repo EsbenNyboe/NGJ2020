@@ -1131,6 +1131,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 8.62
   acceleration: 27.3
+  maxYSpeed: 4.43
+  Yacceleration: 3.3
   accType: 1
 --- !u!4 &605902251
 Transform:

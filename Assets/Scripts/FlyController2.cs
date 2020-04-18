@@ -9,11 +9,18 @@ public class FlyController2 : MonoBehaviour
         noAcc, constAcc, LinAccBoost, QuadAccBoost
     }
 
+
     [SerializeField, Range(0f, 10f)]
     float maxSpeed = 0.10f;
 
     [SerializeField, Range(0f, 50f)]
     float acceleration = 0.10f;
+
+    [SerializeField, Range(0f, 10f)]
+    float maxYSpeed = 1f;
+
+    [SerializeField, Range(0f, 50f)]
+    float Yacceleration = 0.10f;
 
     [SerializeField]
     AccelerationType accType = default;
@@ -21,7 +28,7 @@ public class FlyController2 : MonoBehaviour
     Vector3 velocity, desiredVelocity;
 
     public static Vector3 flyVelocity;
-    public static float flyAcceleration;
+    public static Vector3 flyAcceleration;
 
     public static float speed = 0;
 
@@ -29,6 +36,7 @@ public class FlyController2 : MonoBehaviour
 
     float startAcceleration;
     float jumpInput;
+    float desiredVelocityY;
 
 
     Rigidbody body;
@@ -55,16 +63,17 @@ public class FlyController2 : MonoBehaviour
 
         if(Input.GetAxis("Jump") != 0)
         {
-            jumpInput = Input.GetAxis("Jump");
+            jumpInput = Input.GetAxis("Jump")*maxYSpeed;
         }
         else
         {
             jumpInput = 0;
         }
-        
+
 
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
 
+        
         desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * maxSpeed;
 
         if (Input.GetMouseButton(1))
@@ -133,31 +142,62 @@ public class FlyController2 : MonoBehaviour
         }
         else
         {
-            flyAcceleration = accelerationScaled;
+
+            print(flyAcceleration);
 
             float newXVelocity = Mathf.MoveTowards(currentXVelocity, desiredVelocity.x, accelerationScaled);
             float newZVelocity = Mathf.MoveTowards(currentZVelocity, desiredVelocity.z, accelerationScaled);
 
             velocity += xAxis * (newXVelocity - currentXVelocity) + zAxis * (newZVelocity - currentZVelocity);
 
-            if (jumpInput != 0)
-            {
-                velocity.y = jumpInput*Time.unscaledDeltaTime * 600;
-            }
+            velocity.y = Mathf.MoveTowards(velocity.y, jumpInput, Time.unscaledDeltaTime * Yacceleration * 10f);
 
-            if(velocity.y > 0)
-            {
-                velocity.y -= 70f * Time.unscaledDeltaTime;
-            }
-            else
-            {
-                velocity.y -= 4f * Time.unscaledDeltaTime;
-            }
-            
-            
-            
-
+            CalculateAcceleration(currentXVelocity, currentZVelocity);
         }
     }
 
+    private void CalculateAcceleration(float currentXVelocity, float currentZVelocity)
+    {
+        float xDiff;
+        float zDiff;
+        float yDiff;
+
+        if (desiredVelocity.x > currentXVelocity)
+        {
+            xDiff = desiredVelocity.x - currentXVelocity;
+        }
+        else
+        {
+            xDiff = currentXVelocity - desiredVelocity.x;
+        }
+
+        if (desiredVelocity.z > currentZVelocity)
+        {
+            zDiff = desiredVelocity.z - currentZVelocity;
+        }
+        else
+        {
+            zDiff = -desiredVelocity.z + currentZVelocity;
+        }
+
+        if (desiredVelocity.z == 0)
+        {
+            zDiff = 0;
+        }
+
+        if (desiredVelocity.x == 0)
+        {
+            xDiff = 0;
+        }
+
+        yDiff = jumpInput - velocity.y;
+
+        if (desiredVelocityY == 0)
+        {
+            yDiff = 0;
+        }
+
+        Vector3 velocityDiff = new Vector3(xDiff, yDiff, zDiff);
+        flyAcceleration = velocityDiff;
+    }
 }
