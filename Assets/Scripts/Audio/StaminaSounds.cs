@@ -10,8 +10,8 @@ public class StaminaSounds : MonoBehaviour
     public class Sound
     {
         public AudioClip soundFile;
-        [MinMaxRange(1, 2)]
-        public RangedFloat pitch;
+        [Range(0.5f, 1.5f)]
+        public float pitch;
         [Range(0, 1)]
         public float volume;
     }
@@ -22,6 +22,10 @@ public class StaminaSounds : MonoBehaviour
     public Sound staminaRecharging;
     public float staminaRechargingTO;
     public float fadeSlope;
+
+    private float rechargingPitcher;
+    public float staminaPitchSmooth;
+    public float staminaPitchPower;
 
     private float[] timeOuts;
 
@@ -40,7 +44,10 @@ public class StaminaSounds : MonoBehaviour
             timeOuts[i] += Time.deltaTime * 10;
         }
 
-//        PlayAlertSound();
+        rechargingPitcher = Mathf.Lerp(rechargingPitcher, FlyController2.currentStamina*staminaPitchPower, staminaPitchSmooth);
+        voiceC.pitch = staminaRecharging.pitch + rechargingPitcher;
+
+        //        PlayAlertSound();
         PlayDepletionSound();
         PlayRechargingSound();
         SwitchingStatesSmoothlyRechargingSound();
@@ -50,6 +57,9 @@ public class StaminaSounds : MonoBehaviour
     {
         if (FlyController2.grounded == false && FlyController2.currentStamina < 0.4f && voiceA.isPlaying == false && timeOuts[0] > 3)
         {
+            timeOuts[0] = 0;
+            voiceA.pitch = staminaLow.pitch;
+            voiceA.volume = staminaLow.volume;
             voiceA.clip = staminaLow.soundFile;
             voiceA.Play();
         }
@@ -57,9 +67,12 @@ public class StaminaSounds : MonoBehaviour
 
     private void PlayDepletionSound()
     {
-        if (FlyController2.grounded == false && FlyController2.currentStamina == 0 && voiceB.isPlaying == false)
+        if (FlyController2.grounded == false && FlyController2.currentStamina == 0 && voiceB.isPlaying == false && timeOuts[1] > 3)
         {
+            timeOuts[1] = 0;
             voiceA.Stop();
+            voiceB.pitch = staminaDepleted.pitch;
+            voiceB.volume = staminaDepleted.volume;
             voiceB.clip = staminaDepleted.soundFile;
             voiceB.Play();
         }
@@ -85,12 +98,5 @@ public class StaminaSounds : MonoBehaviour
         {
             voiceC.volume -= fadeSlope;
         }
-    }
-
-    private void Play(AudioSource voice, int i, AudioClip clip)
-    {
-        timeOuts[i] = 0;
-        voice.clip = clip;
-        voice.Play();
     }
 }
