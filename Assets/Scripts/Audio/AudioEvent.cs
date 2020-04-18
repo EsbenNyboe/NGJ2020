@@ -6,7 +6,7 @@ public class AudioEvent: MonoBehaviour
 {
     private AudioSource voice;
     private int selectedFile;
-
+    
     [System.Serializable]
     public class Sound
     {
@@ -26,20 +26,23 @@ public class AudioEvent: MonoBehaviour
 
     public void PlaySound()
     {
-        selectedFile = Random.Range(0, sound.Length);
-        voice.clip = sound[selectedFile].soundFile;
+        if (!voice.isPlaying)
+        {
+            selectedFile = Random.Range(0, sound.Length);
+            voice.clip = sound[selectedFile].soundFile;
 
-        if (sound[selectedFile].enableParameters == true)
-        {
-            voice.pitch = Random.Range(sound[selectedFile].pitch.minValue, sound[selectedFile].pitch.maxValue);
-            voice.volume = sound[selectedFile].volume;
+            if (sound[selectedFile].enableParameters == true)
+            {
+                voice.pitch = Random.Range(sound[selectedFile].pitch.minValue, sound[selectedFile].pitch.maxValue);
+                voice.volume = sound[selectedFile].volume;
+            }
+            else // replace this with "else: soundFile inherits its parameters from the AudioEvent"
+            {
+                voice.pitch = 1;
+                voice.volume = 1;
+            }
+            voice.Play();
         }
-        else // replace this with "else: soundFile inherits its parameters from the AudioEvent"
-        {
-            voice.pitch = 1;
-            voice.volume = 1;
-        }
-        voice.Play();
     }
     public void StopSound()
     {
