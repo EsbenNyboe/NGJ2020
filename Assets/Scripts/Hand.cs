@@ -150,6 +150,10 @@ public class Hand : MonoBehaviour
             StopAllCoroutines();
             StartCoroutine(CoolDownCoroutine());   
         }
+        if(collision.gameObject.GetComponent<Target>() != null)
+        {
+            GameManager.Death();
+        }
       
     }
 
