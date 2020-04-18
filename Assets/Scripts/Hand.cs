@@ -56,7 +56,7 @@ public class Hand : MonoBehaviour
         
         if (resetting)
         {
-           // hand.right = (hand.position - lastFramePos);
+            //hand.right = (hand.position - lastFramePos);
             t += swatSpeed * attackTimeModifier * Time.unscaledDeltaTime;
             hand.position = BezierCurve(startPos, restPos.position, t * t);
             if(Vector3.Distance(restPos.position, hand.position) < 0.5f)
@@ -106,7 +106,7 @@ public class Hand : MonoBehaviour
                     else
                         hand.position = BezierCurve2(swatPos, overShoot, 2 * t);
                 }
-                if (Vector3.Distance(hand.position, swatPos) < 0.1f && !reachedTarget)
+                if (Vector3.Distance(hand.position, swatPos) < 0.3f && !reachedTarget)
                 {
 
                     // hand.position = swatPos;
@@ -114,7 +114,16 @@ public class Hand : MonoBehaviour
                     //swatPos = overShoot;
                     reachedTarget = true;
                     t = 0;
+                    StopAllCoroutines();
                     StartCoroutine(SwatCoroutine());
+                }
+                if(Vector3.Distance(hand.position, overShoot) < 0.3f && reachedTarget &&!resetting)
+                {
+                    resetting = true;
+                    t = 0;
+                    startPos = hand.position;
+                    StopAllCoroutines();
+                    StartCoroutine(CoolDownCoroutine());
                 }
 
                
@@ -127,12 +136,13 @@ public class Hand : MonoBehaviour
     public void OnCollisionEnter(Collision collision)
     {
       
-        if (collision.gameObject.isStatic && !resetting)
+        if (collision.gameObject.isStatic && !resetting && reachedTarget)
         {
             print("collisiop");
             t = 0;
             resetting = true;
             startPos = hand.position;
+            StopAllCoroutines();
             StartCoroutine(CoolDownCoroutine());   
         }
       
@@ -205,14 +215,15 @@ public class Hand : MonoBehaviour
     void LiftArm()
     {
         Vector3 readyDirNorm;
-
-        if (FlyController2.grounded == true) // Vertical swat
+        if (!swat)
         {
-            currentReadyPos = readyPosVert;
+            if (FlyController2.grounded == true) // Vertical swat
+            {
+                currentReadyPos = readyPosVert;
+            }
+            else //Horizontal swat
+                currentReadyPos = readyPosHori;
         }
-        else //Horizontal swat
-            currentReadyPos = readyPosHori;
-
             readyDirNorm = (currentReadyPos.position - hand.position).normalized;
 
         hand.position = hand.position + readyDirNorm * liftHandSpeed * attackTimeModifier* Time.unscaledDeltaTime;
