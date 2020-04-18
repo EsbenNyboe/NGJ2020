@@ -300,7 +300,7 @@ public class FlyController2 : MonoBehaviour
             desiredAngleY = body.transform.localRotation.y - 90;
             desiredAngleZ = landedOrientation.eulerAngles.z;
 
-            Debug.DrawRay(transform.position, hit.normal);
+            Debug.DrawRay(transform.position, hit.normal, Color.black);
             Debug.DrawRay(transform.position, landedForward, Color.yellow);
             
         }
