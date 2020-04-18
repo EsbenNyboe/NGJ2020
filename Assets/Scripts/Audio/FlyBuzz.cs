@@ -40,6 +40,7 @@ public class FlyBuzz : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("stam: " + FlyController2.currentStamina);
         timeSinceReset += Time.deltaTime * 10;
         MacroPitching();
         LimitPitchMinMaxValues(0.7f, 1.4f);
@@ -48,6 +49,22 @@ public class FlyBuzz : MonoBehaviour
 
         SwitchingStatesSmoothly(); // grounding and ungrounding smoothly
         audioSource.pitch = pitch;
+
+        switch(FlyController2.grounded)
+        {
+            case true:
+                if (isGrounded == false)
+                {
+                    StateChangeGrounded();
+                }
+                break;
+            case false:
+                if (isGrounded == true)
+                {
+                    StateChangeFlying();
+                }
+                break;
+        }
 
         if (Input.GetKeyDown(KeyCode.F)) 
         {
@@ -71,7 +88,7 @@ public class FlyBuzz : MonoBehaviour
         }
     }    
 
-    public void StateChangeFlying() // run this when fly starts flying
+    public void StateChangeFlying() 
     {
         isGrounded = false;
         audioSource.volume = volume;
@@ -79,7 +96,7 @@ public class FlyBuzz : MonoBehaviour
         //audioSource.UnPause();
     }
 
-    public void StateChangeGrounded() // run this when fly stops flying
+    public void StateChangeGrounded() 
     {
         isGrounded = true;
         //audioSource.Pause();

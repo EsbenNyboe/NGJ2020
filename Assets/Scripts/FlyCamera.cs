@@ -182,7 +182,6 @@ public class FlyCamera : MonoBehaviour
     private void MoveCamera()
     {
 
-
         if (Input.GetMouseButton(1) || Input.GetMouseButton(0))
         {
             xDeg += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
