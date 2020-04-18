@@ -51,6 +51,12 @@ MonoBehaviour:
       minValue: 0.7071259
       maxValue: 1.0133045
     volume: 1
+  - soundFile: {fileID: 8300000, guid: 715088d4332d1f642ba3028902b1ecdc, type: 3}
+    enableParameters: 1
+    pitch:
+      minValue: 0.7071259
+      maxValue: 1.0133045
+    volume: 1
 --- !u!82 &8086282187603672661
 AudioSource:
   m_ObjectHideFlags: 0
