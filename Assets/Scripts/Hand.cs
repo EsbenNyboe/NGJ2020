@@ -56,35 +56,25 @@ public class Hand : MonoBehaviour
             // hand.position = hand.position + targetDir * swatSpeed * Time.deltaTime;
             hand.right = -(hand.position - lastFramePos);
 
-            if (!reachedTarget)
-            {
+           
                 t += swatSpeed * Time.unscaledDeltaTime;
 
-                hand.position = BezierCurze(startPos, swatPos, t * t);
-
-                if (Vector3.Distance(hand.position, swatPos) < 0.05)
-                {
-                   
-                    hand.position = swatPos;
-                    //startPos = hand.position;
-                   
-                
-
-                    reachedTarget = true;
-                   
-                 
-                   
-
-                }
-            }
+            if (!reachedTarget)
+                hand.position = BezierCurve(startPos, swatPos, t * t);
             else
-            {
-                //t += swatSpeed * Time.unscaledDeltaTime;
+                hand.position = BezierCurve2(swatPos, overShoot, 2*t);
+                if (Vector3.Distance(hand.position, swatPos) < 0.1f && !reachedTarget)
+                {
 
-                // hand.position = BezierCurze(startPos, hand.right, t * t);
-                // hand.position = direction * t;
-                //hand.position = hand.position + hand.right * t;
-            }
+                // hand.position = swatPos;
+                   // startPos = swatPos;
+                    //swatPos = overShoot;
+                reachedTarget = true;
+                t = 0;
+               
+                }
+            
+        
             StartCoroutine(SwatCoroutine());
 
         }
@@ -93,11 +83,27 @@ public class Hand : MonoBehaviour
         
     }
 
-    Vector3 BezierCurze(Vector3 a, Vector3 d , float t) // kan optimereres
+    Vector3 BezierCurve(Vector3 a, Vector3 d , float t) // kan optimereres
     {
         
         Vector3 b = a + 1f * Vector3.up;
         Vector3 c = d + +1f * Vector3.up;
+
+        Vector3 m = Vector3.Lerp(a, b, t);
+        Vector3 n = Vector3.Lerp(b, c, t);
+        Vector3 o = Vector3.Lerp(c, d, t);
+        Vector3 p = Vector3.Lerp(m, n, t);
+        Vector3 e = Vector3.Lerp(n, o, t);
+        Vector3 pointOnCurve = Vector3.Lerp(p, e, t);
+
+        return pointOnCurve;
+
+    }
+    Vector3 BezierCurve2(Vector3 a, Vector3 d, float t) // kan optimereres
+    {
+
+        Vector3 b = a + -0.2f * Vector3.up;
+        Vector3 c = d + +-0.1f * Vector3.up;
 
         Vector3 m = Vector3.Lerp(a, b, t);
         Vector3 n = Vector3.Lerp(b, c, t);
@@ -121,7 +127,7 @@ public class Hand : MonoBehaviour
             swat = true;
             swatPos = target.position;
             startPos = hand.position;
-            overShoot = target.position * 1.2f; 
+            overShoot = target.position + (target.position -hand.position).normalized; 
             t = 0;
         }
     }
@@ -131,11 +137,12 @@ public class Hand : MonoBehaviour
         float scale = Time.timeScale;
         yield return new WaitForSeconds(2f*scale); //magic number
         swat = false;
+        reachedTarget = false;
         coolDown = true;
        
         yield return new WaitForSeconds(2f*scale);
         coolDown = false;
-        reachedTarget = false;
+        
         
     }
  

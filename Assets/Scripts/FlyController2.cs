@@ -26,7 +26,7 @@ public class FlyController2 : MonoBehaviour
     AccelerationType accType = default;
 
     Vector3 velocity, desiredVelocity;
-
+    public Transform flyBody;
     public static Vector3 flyVelocity;
     public static Vector3 flyAcceleration;
 
@@ -63,7 +63,11 @@ public class FlyController2 : MonoBehaviour
 
         if(Input.GetAxis("Jump") != 0)
         {
-            jumpInput = Input.GetAxis("Jump")*maxYSpeed;
+            jumpInput = Input.GetAxis("Jump");
+        }
+        else if (Input.GetKey(KeyCode.LeftControl))
+        {
+            jumpInput = -1;
         }
         else
         {
@@ -93,7 +97,6 @@ public class FlyController2 : MonoBehaviour
         {
             forwardDir = Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up);
             transform.forward = forwardDir;
-
         }
         
         UpdateState();
@@ -128,8 +131,11 @@ public class FlyController2 : MonoBehaviour
                 break;
         }
 
-        Vector3 xAxis = transform.right;
-        Vector3 zAxis = transform.forward;
+        //Vector3 xAxis = transform.right;
+        //Vector3 zAxis = transform.forward;
+
+        Vector3 zAxis = Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up);
+        Vector3 xAxis = cam.transform.right;
 
         float currentXVelocity = Vector3.Dot(velocity, xAxis);
         float currentZVelocity = Vector3.Dot(velocity, zAxis);
@@ -143,17 +149,46 @@ public class FlyController2 : MonoBehaviour
         else
         {
 
-            print(flyAcceleration);
-
             float newXVelocity = Mathf.MoveTowards(currentXVelocity, desiredVelocity.x, accelerationScaled);
             float newZVelocity = Mathf.MoveTowards(currentZVelocity, desiredVelocity.z, accelerationScaled);
 
             velocity += xAxis * (newXVelocity - currentXVelocity) + zAxis * (newZVelocity - currentZVelocity);
 
-            velocity.y = Mathf.MoveTowards(velocity.y, jumpInput, Time.unscaledDeltaTime * Yacceleration * 10f);
+            float cameraAngleCompensation = Vector3.Cross(cam.transform.forward, transform.forward).magnitude;
 
-            CalculateAcceleration(currentXVelocity, currentZVelocity);
+            if(jumpInput != 0 && velocity.y != 0)
+            {
+                velocity.y = Mathf.MoveTowards(velocity.y, Mathf.Clamp(jumpInput, -1, 1) * maxYSpeed, Time.unscaledDeltaTime * Yacceleration * 10f);
+
+                
+            }
+            else if(velocity.y > 0)
+            {
+                //velocity.y -= Time.unscaledDeltaTime*4;
+                velocity.y += 0.1f*(Mathf.PerlinNoise(68, 562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
+                velocity.y *= 0.97f;
+            }
+            else
+            {
+                velocity.y -= Time.unscaledDeltaTime * 0.2f;
+                velocity.y += 0.1f*(Mathf.PerlinNoise(68, 562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
+                velocity.y *= 0.97f;
+            }
+
+
+            LocalRotation(currentXVelocity, currentZVelocity);
+
         }
+    }
+
+    private void LocalRotation(float currentXVelocity, float currentZVelocity)
+    {
+        CalculateAcceleration(currentXVelocity, currentZVelocity);
+
+        float newXrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.x, -desiredVelocity.x * 4.5f, Time.unscaledDeltaTime * 80);
+        float newZrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.z, -desiredVelocity.z * 4.5f, Time.unscaledDeltaTime * 80);
+        print(newXrotation);
+        flyBody.transform.localRotation = Quaternion.Euler(newXrotation, cam.transform.localRotation.y - 90, newZrotation);
     }
 
     private void CalculateAcceleration(float currentXVelocity, float currentZVelocity)
@@ -190,7 +225,7 @@ public class FlyController2 : MonoBehaviour
             xDiff = 0;
         }
 
-        yDiff = jumpInput - velocity.y;
+        yDiff = jumpInput*maxYSpeed - velocity.y;
 
         if (desiredVelocityY == 0)
         {
