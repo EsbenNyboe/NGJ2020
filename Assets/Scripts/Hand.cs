@@ -22,9 +22,14 @@ public class Hand : MonoBehaviour
     float t;
     Vector3 startPos;
     Vector3 overShoot;
-    Vector3 currentReadyPos;
+    Transform currentReadyPos;
     Vector3 lastFramePos;
     FlyController2 fly;
+    public float attackTimeModifier;
+    public float homingUntilDistance;
+    public float swatTime;
+    public float cooldownTime;
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -46,7 +51,7 @@ public class Hand : MonoBehaviour
         if(distanceToTarget< distanceThreshold)
         {
             // The step size is equal to speed times frame time.
-            var step = rotationSpeed * Time.unscaledDeltaTime;
+            var step = rotationSpeed *attackTimeModifier * Time.unscaledDeltaTime;
 
             Quaternion newRotation = Quaternion.LookRotation(spine.position - target.position);
             // Rotate our transform a step closer to the target's.
@@ -60,17 +65,22 @@ public class Hand : MonoBehaviour
 
             // hand.position = hand.position + targetDir * swatSpeed * Time.deltaTime;
             hand.right = -(hand.position - lastFramePos);
-
+            
+            if(Vector3.Distance(target.position, hand.position) > homingUntilDistance && !reachedTarget)
+            {
+                swatPos = target.position;
+                overShoot = target.position + (target.position - hand.position).normalized;
+            }
            
-                t += swatSpeed * Time.unscaledDeltaTime;
-            if (currentReadyPos == readyPosVert.position ) //Vertical curves
+                t += swatSpeed *attackTimeModifier * Time.unscaledDeltaTime;
+            if (currentReadyPos == readyPosVert ) //Vertical curves
             {
                 if (!reachedTarget)
                     hand.position = BezierCurve(startPos, swatPos, t * t);
                 else
                     hand.position = BezierCurve2(swatPos, overShoot, 2 * t);
             }
-            else //Horizontal curves
+            else if(currentReadyPos == readyPosHori) //Horizontal curves
             {
                 if (!reachedTarget)
                     hand.position = BezierCurve3(startPos, swatPos, t * t);
@@ -132,8 +142,24 @@ public class Hand : MonoBehaviour
     Vector3 BezierCurve3(Vector3 a, Vector3 d, float t) // kan optimereres
     {
 
-        Vector3 b = a + -1f * Vector3.left;
-        Vector3 c = d + -1f * Vector3.left;
+        Vector3 b = a + 0.5f * Vector3.left;
+        Vector3 c = d + 0.5f * Vector3.left;
+
+        Vector3 m = Vector3.Lerp(a, b, t);
+        Vector3 n = Vector3.Lerp(b, c, t);
+        Vector3 o = Vector3.Lerp(c, d, t);
+        Vector3 p = Vector3.Lerp(m, n, t);
+        Vector3 e = Vector3.Lerp(n, o, t);
+        Vector3 pointOnCurve = Vector3.Lerp(p, e, t);
+
+        return pointOnCurve;
+
+    }
+    Vector3 BezierCurve4(Vector3 a, Vector3 d, float t) // kan optimereres
+    {
+
+        Vector3 b = a + -0.2f * Vector3.left;
+        Vector3 c = d + -0.2f * Vector3.left;
 
         Vector3 m = Vector3.Lerp(a, b, t);
         Vector3 n = Vector3.Lerp(b, c, t);
@@ -148,17 +174,19 @@ public class Hand : MonoBehaviour
     void LiftArm()
     {
         Vector3 readyDirNorm;
-        
+
         if (FlyController2.grounded == true) // Vertical swat
-            currentReadyPos = readyPosVert.position;
+        {
+            currentReadyPos = readyPosVert;
+        }
         else //Horizontal swat
-            currentReadyPos = readyPosHori.position;
+            currentReadyPos = readyPosHori;
 
-            readyDirNorm = (currentReadyPos - hand.position).normalized;
+            readyDirNorm = (currentReadyPos.position - hand.position).normalized;
 
-        hand.position = hand.position + readyDirNorm * liftHandSpeed * Time.unscaledDeltaTime;
+        hand.position = hand.position + readyDirNorm * liftHandSpeed * attackTimeModifier* Time.unscaledDeltaTime;
 
-        if(Vector3.Distance(hand.position, currentReadyPos) < 0.05f && !swat) //magic number indtil videre
+        if(Vector3.Distance(hand.position, currentReadyPos.position) < 0.05f && !swat) //magic number indtil videre
         {
             swat = true;
             swatPos = target.position;
@@ -171,12 +199,12 @@ public class Hand : MonoBehaviour
     {
         
         float scale = Time.timeScale;
-        yield return new WaitForSeconds(2f*scale); //magic number
+        yield return new WaitForSeconds((swatTime/attackTimeModifier)*scale); //magic number
         swat = false;
         reachedTarget = false;
         coolDown = true;
        
-        yield return new WaitForSeconds(2f*scale);
+        yield return new WaitForSeconds((cooldownTime/attackTimeModifier)*scale);
         coolDown = false;
         
         
