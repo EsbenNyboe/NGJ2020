@@ -586,16 +586,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tallerken2
       objectReference: {fileID: 0}
-    - target: {fileID: 5045806517681710109, guid: 9af9ae073cf26ae4fbdc60f32c944c0e,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121469664686596164, guid: 9af9ae073cf26ae4fbdc60f32c944c0e,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9af9ae073cf26ae4fbdc60f32c944c0e, type: 3}
 --- !u!4 &102663547 stripped
@@ -670,16 +660,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tallerken4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5045806517681710109, guid: a285020840a13514ebce29abec505e75,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121469664686596164, guid: a285020840a13514ebce29abec505e75,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a285020840a13514ebce29abec505e75, type: 3}
@@ -1332,11 +1312,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8086282187603672662, guid: 003e0eff964fd6c4f893d41bbe2626e3,
-        type: 3}
-      propertyPath: sound.Array.data[0].enableParameters
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8086282187603672667, guid: 003e0eff964fd6c4f893d41bbe2626e3,
         type: 3}
       propertyPath: m_Name
@@ -1344,18 +1319,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 003e0eff964fd6c4f893d41bbe2626e3, type: 3}
---- !u!114 &501240589 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8086282187603672662, guid: 003e0eff964fd6c4f893d41bbe2626e3,
-    type: 3}
-  m_PrefabInstance: {fileID: 1678734425}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deeeae7abcea25d4a96d017976090ec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &511802958
 GameObject:
   m_ObjectHideFlags: 0
@@ -1512,6 +1475,121 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 5231350126746613297, guid: d1979a10c317b834483bcc20ce50d560, type: 3}
+--- !u!82 &536957742
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 536957736}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &536957743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 536957736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deeeae7abcea25d4a96d017976090ec1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound:
+  - soundFile: {fileID: 8300000, guid: 607d3fd6ab403dd4abe713802120b902, type: 3}
+    enableParameters: 0
+    pitch:
+      minValue: 1.2436819
+      maxValue: 1.420771
+    volume: 0
 --- !u!1001 &547972456
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1519,11 +1597,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 855515725}
     m_Modifications:
-    - target: {fileID: 32285534424281006, guid: 0a8ed5815e8b72740a5863b53a5936ad,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     - target: {fileID: 3029388936878867096, guid: 0a8ed5815e8b72740a5863b53a5936ad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1584,11 +1657,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pande1_Kobber
       objectReference: {fileID: 0}
-    - target: {fileID: 5045806517681710109, guid: 0a8ed5815e8b72740a5863b53a5936ad,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a8ed5815e8b72740a5863b53a5936ad, type: 3}
 --- !u!4 &547972457 stripped
@@ -1604,11 +1672,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 855515725}
     m_Modifications:
-    - target: {fileID: 32285534424281006, guid: ba80e3fe32b861f4e84df36ac48376bf,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     - target: {fileID: 3029388936878867096, guid: ba80e3fe32b861f4e84df36ac48376bf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1669,11 +1732,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pande1
       objectReference: {fileID: 0}
-    - target: {fileID: 5045806517681710109, guid: ba80e3fe32b861f4e84df36ac48376bf,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba80e3fe32b861f4e84df36ac48376bf, type: 3}
 --- !u!4 &639633071 stripped
@@ -1682,18 +1740,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 639633070}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &643786012 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8086282187603672662, guid: 003e0eff964fd6c4f893d41bbe2626e3,
-    type: 3}
-  m_PrefabInstance: {fileID: 1124279895}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deeeae7abcea25d4a96d017976090ec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &659519048 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2000736972368948652, guid: cd7620a25c574cc40b2a2ff0f1259ade,
@@ -1721,11 +1767,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mass
       value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3287436919236747199, guid: 2c4f0b24f33b1b340adc413279fb26cb,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
       objectReference: {fileID: 0}
     - target: {fileID: 4396539141327123470, guid: 2c4f0b24f33b1b340adc413279fb26cb,
         type: 3}
@@ -1801,11 +1842,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: "Gryde1_St\xE5l"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7239256309503107387, guid: 2c4f0b24f33b1b340adc413279fb26cb,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
       objectReference: {fileID: 0}
     - target: {fileID: 7716233304690366504, guid: 2c4f0b24f33b1b340adc413279fb26cb,
         type: 3}
@@ -3052,11 +3088,6 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Collision
       objectReference: {fileID: 0}
-    - target: {fileID: 7360190097660432116, guid: e32eb94c5a1e98e40981ce02aeb81ebf,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e32eb94c5a1e98e40981ce02aeb81ebf, type: 3}
 --- !u!4 &1127444157 stripped
@@ -3412,16 +3443,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tallerken3
       objectReference: {fileID: 0}
-    - target: {fileID: 5045806517681710109, guid: c6a2eadc5ea17e14eb6349cb3137c472,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121469664686596164, guid: c6a2eadc5ea17e14eb6349cb3137c472,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6a2eadc5ea17e14eb6349cb3137c472, type: 3}
 --- !u!4 &1226896842 stripped
@@ -3619,18 +3640,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 003e0eff964fd6c4f893d41bbe2626e3, type: 3}
---- !u!114 &1364794787 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8086282187603672662, guid: 003e0eff964fd6c4f893d41bbe2626e3,
-    type: 3}
-  m_PrefabInstance: {fileID: 60072568}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deeeae7abcea25d4a96d017976090ec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1417981544
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3698,11 +3707,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bowl1
       objectReference: {fileID: 0}
-    - target: {fileID: 5045806517681710109, guid: bfccb3aff10f3eb4abf2902f7eada934,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     - target: {fileID: 6277224685047299367, guid: bfccb3aff10f3eb4abf2902f7eada934,
         type: 3}
       propertyPath: m_IsKinematic
@@ -3712,11 +3716,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Convex
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121469664686596164, guid: bfccb3aff10f3eb4abf2902f7eada934,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfccb3aff10f3eb4abf2902f7eada934, type: 3}
@@ -4237,16 +4236,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tallerken1
       objectReference: {fileID: 0}
-    - target: {fileID: 5045806517681710109, guid: 0071e1daa89afdc48a243690b51f1f87,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121469664686596164, guid: 0071e1daa89afdc48a243690b51f1f87,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0071e1daa89afdc48a243690b51f1f87, type: 3}
 --- !u!4 &1591129873 stripped
@@ -4267,18 +4256,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 831228959638940753}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1631133373 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8086282187603672662, guid: 003e0eff964fd6c4f893d41bbe2626e3,
-    type: 3}
-  m_PrefabInstance: {fileID: 497050627}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deeeae7abcea25d4a96d017976090ec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1643880149
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4553,11 +4530,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 5045806517681710109, guid: d5c2a8d95af2127498669347bfec1736,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     - target: {fileID: 8554159147630029210, guid: d5c2a8d95af2127498669347bfec1736,
         type: 3}
       propertyPath: m_Convex
@@ -4567,11 +4539,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121469664686596164, guid: d5c2a8d95af2127498669347bfec1736,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5c2a8d95af2127498669347bfec1736, type: 3}
@@ -4661,7 +4628,6 @@ GameObject:
   - component: {fileID: 1761687454}
   - component: {fileID: 1761687453}
   - component: {fileID: 1761687455}
-  - component: {fileID: 1761687456}
   m_Layer: 0
   m_Name: Gamemanager
   m_TagString: Untagged
@@ -4709,29 +4675,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collisionVoices: []
-  numCollVoices: 4
-  colIndex: 0
---- !u!114 &1761687456
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1761687452}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b680496a183e03458783e59fa5579b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  testEvents:
-  - {fileID: 1990529456}
-  - {fileID: 1364794787}
-  - {fileID: 2029671972}
-  - {fileID: 643786012}
-  - {fileID: 1909950318}
-  - {fileID: 2012030200}
-  - {fileID: 501240589}
-  - {fileID: 1631133373}
+  numCollVoices: 8
+  colIndex: -1
 --- !u!1001 &1762829463
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4799,20 +4744,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bowl2
       objectReference: {fileID: 0}
-    - target: {fileID: 5045806517681710109, guid: 2c310b17447570441a470d8fd497c6d1,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     - target: {fileID: 8554159147630029210, guid: 2c310b17447570441a470d8fd497c6d1,
         type: 3}
       propertyPath: m_Convex
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9121469664686596164, guid: 2c310b17447570441a470d8fd497c6d1,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c310b17447570441a470d8fd497c6d1, type: 3}
@@ -4941,11 +4876,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 855515725}
     m_Modifications:
-    - target: {fileID: 32285534424281006, guid: ae32178efcd230c4abf0816bb49cc5f2,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     - target: {fileID: 3029388936878867096, guid: ae32178efcd230c4abf0816bb49cc5f2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5125,36 +5055,12 @@ Transform:
   m_Father: {fileID: 1453918456}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1909950318 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8086282187603672662, guid: 003e0eff964fd6c4f893d41bbe2626e3,
-    type: 3}
-  m_PrefabInstance: {fileID: 712937949}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deeeae7abcea25d4a96d017976090ec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1934729322 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5246308247034630743, guid: 0071e1daa89afdc48a243690b51f1f87,
     type: 3}
   m_PrefabInstance: {fileID: 1591129872}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1990529456 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8086282187603672662, guid: 003e0eff964fd6c4f893d41bbe2626e3,
-    type: 3}
-  m_PrefabInstance: {fileID: 693098639}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deeeae7abcea25d4a96d017976090ec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1992026275
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5344,36 +5250,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 003e0eff964fd6c4f893d41bbe2626e3, type: 3}
---- !u!114 &2012030200 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8086282187603672662, guid: 003e0eff964fd6c4f893d41bbe2626e3,
-    type: 3}
-  m_PrefabInstance: {fileID: 2008659874}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deeeae7abcea25d4a96d017976090ec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2014288538 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3902908238003756477, guid: 0a8ed5815e8b72740a5863b53a5936ad,
     type: 3}
   m_PrefabInstance: {fileID: 547972456}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2029671972 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8086282187603672662, guid: 003e0eff964fd6c4f893d41bbe2626e3,
-    type: 3}
-  m_PrefabInstance: {fileID: 1283773385}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deeeae7abcea25d4a96d017976090ec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2091024335 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5246308247034630743, guid: d5c2a8d95af2127498669347bfec1736,
@@ -5496,11 +5378,6 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 10
       objectReference: {fileID: 0}
-    - target: {fileID: 3287436919236747199, guid: cd7620a25c574cc40b2a2ff0f1259ade,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     - target: {fileID: 4396539141327123470, guid: cd7620a25c574cc40b2a2ff0f1259ade,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5576,11 +5453,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gryde1_Kobber
       objectReference: {fileID: 0}
-    - target: {fileID: 7239256309503107387, guid: cd7620a25c574cc40b2a2ff0f1259ade,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     - target: {fileID: 7716233304690366504, guid: cd7620a25c574cc40b2a2ff0f1259ade,
         type: 3}
       propertyPath: m_Convex
@@ -5601,11 +5473,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 855515725}
     m_Modifications:
-    - target: {fileID: 32285534424281006, guid: ed6add33e9adefd4c809c60e92eff0f9,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     - target: {fileID: 3029388936878867096, guid: ed6add33e9adefd4c809c60e92eff0f9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5681,11 +5548,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: "Gryde2_St\xE5l"
       objectReference: {fileID: 0}
-    - target: {fileID: 5045806517681710109, guid: ed6add33e9adefd4c809c60e92eff0f9,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed6add33e9adefd4c809c60e92eff0f9, type: 3}
 --- !u!4 &767498760566711728 stripped
@@ -5705,16 +5567,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Gryde1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1355567609499544878, guid: 90f2ce335b2c8cd43977fa242655bb7b,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
-    - target: {fileID: 1634629333049841838, guid: 90f2ce335b2c8cd43977fa242655bb7b,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
       objectReference: {fileID: 0}
     - target: {fileID: 4376118069754380331, guid: 90f2ce335b2c8cd43977fa242655bb7b,
         type: 3}
@@ -5891,11 +5743,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gryde2
       objectReference: {fileID: 0}
-    - target: {fileID: 2323754759283131074, guid: 8d689e626ecf53a459baf707f5f74d3a,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     - target: {fileID: 2609616620967976563, guid: 8d689e626ecf53a459baf707f5f74d3a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5971,11 +5818,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 5852401110925580539, guid: 8d689e626ecf53a459baf707f5f74d3a,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d689e626ecf53a459baf707f5f74d3a, type: 3}
 --- !u!4 &4631061121638889879 stripped
@@ -5991,11 +5833,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 855515725}
     m_Modifications:
-    - target: {fileID: 26890644808296055, guid: 3d11c992d2ce4b9419d6935af2765b81,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
-      objectReference: {fileID: 0}
     - target: {fileID: 64497970897328957, guid: 3d11c992d2ce4b9419d6935af2765b81,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6055,11 +5892,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Gryde2_Kobber
-      objectReference: {fileID: 0}
-    - target: {fileID: 2185144352206262403, guid: 3d11c992d2ce4b9419d6935af2765b81,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collision
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d11c992d2ce4b9419d6935af2765b81, type: 3}
