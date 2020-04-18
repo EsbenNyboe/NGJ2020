@@ -23945,7 +23945,7 @@ MonoBehaviour:
   Yacceleration: 2.1
   accType: 2
   staminaChargeTime: 1
-  staminaFlyTime: 4
+  staminaFlyTime: 20.7
   flyBody: {fileID: 1351070860}
 --- !u!4 &605902251
 Transform:
