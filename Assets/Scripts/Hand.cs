@@ -56,8 +56,8 @@ public class Hand : MonoBehaviour
         
         if (resetting)
         {
-            hand.right = -(hand.position - lastFramePos);
-            t += liftHandSpeed * attackTimeModifier * Time.unscaledDeltaTime;
+           // hand.right = (hand.position - lastFramePos);
+            t += swatSpeed * attackTimeModifier * Time.unscaledDeltaTime;
             hand.position = BezierCurve(startPos, restPos.position, t * t);
             if(Vector3.Distance(restPos.position, hand.position) < 0.5f)
             {
