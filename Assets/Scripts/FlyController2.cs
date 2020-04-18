@@ -296,6 +296,7 @@ public class FlyController2 : MonoBehaviour
             Quaternion landedOrientation = Quaternion.LookRotation(landedForward, hit.normal); //mærkelig "forward" fordi fluen vender mærkeligt (langs +x)
             //print(hit.normal);
 
+            Debug.DrawRay(hit.point, hit.normal, Color.blue);
             desiredAngleX = landedOrientation.eulerAngles.x;
             desiredAngleY = body.transform.localRotation.y - 90;
             desiredAngleZ = landedOrientation.eulerAngles.z;
@@ -306,8 +307,8 @@ public class FlyController2 : MonoBehaviour
         }
         else
         {
-            desiredAngleX = -desiredVelocity.x * 4.5f;
-            desiredAngleZ = -desiredVelocity.z * 4.5f;
+            desiredAngleX = -desiredVelocity.x * 14.5f;
+            desiredAngleZ = -desiredVelocity.z * 14.5f;
             desiredAngleY = cam.transform.localRotation.y - 90;
         }
 
