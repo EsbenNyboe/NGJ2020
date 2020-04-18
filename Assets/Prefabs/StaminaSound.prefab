@@ -175,26 +175,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   staminaLow:
     soundFile: {fileID: 8300000, guid: 9d0241fc771bade45a8d42d2573a7d8c, type: 3}
-    pitch:
-      minValue: 1
-      maxValue: 1
-    volume: 1
+    pitch: 1
+    volume: 0
   staminaLowTO: 1
   staminaDepleted:
     soundFile: {fileID: 8300000, guid: 607d3fd6ab403dd4abe713802120b902, type: 3}
-    pitch:
-      minValue: 1
-      maxValue: 1
+    pitch: 1
     volume: 1
   staminaDepletedTO: 1
   staminaRecharging:
     soundFile: {fileID: 8300000, guid: 67721a046cd79a548a573ed8f517ebc2, type: 3}
-    pitch:
-      minValue: 1
-      maxValue: 1
-    volume: 1
+    pitch: 1.102
+    volume: 0.499
   staminaRechargingTO: 0.1
   fadeSlope: 0.04
+  staminaPitchSmooth: 1
+  staminaPitchPower: 0.15
 --- !u!1 &74436535344780094
 GameObject:
   m_ObjectHideFlags: 0
