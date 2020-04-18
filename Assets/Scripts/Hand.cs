@@ -16,10 +16,13 @@ public class Hand : MonoBehaviour
     public float swatSpeed;
     public bool swat;
     public bool coolDown;
-  
+    public bool reachedTarget;
     Vector3 swatPos;
     float t;
     Vector3 startPos;
+    Vector3 overShoot;
+
+    Vector3 lastFramePos;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,16 +30,18 @@ public class Hand : MonoBehaviour
         spine = GameObject.FindObjectOfType<Spine>().GetComponent<Transform>();
         target = GameObject.FindObjectOfType<Target>().GetComponent<Transform>();
         readyPos = GameObject.FindObjectOfType<readyPos>().GetComponent<Transform>();
+        lastFramePos = hand.position;
     }
 
     // Update is called once per frame
     void Update()
     {
+       
         distanceToTarget = Vector3.Distance(target.position, spine.position);
         if(distanceToTarget< distanceThreshold)
         {
             // The step size is equal to speed times frame time.
-            var step = rotationSpeed * Time.deltaTime;
+            var step = rotationSpeed * Time.unscaledDeltaTime;
 
             Quaternion newRotation = Quaternion.LookRotation(spine.position - target.position);
             // Rotate our transform a step closer to the target's.
@@ -49,23 +54,42 @@ public class Hand : MonoBehaviour
             //Vector3 targetDir = (swatPos - hand.position).normalized;
 
             // hand.position = hand.position + targetDir * swatSpeed * Time.deltaTime;
+            hand.right = -(hand.position - lastFramePos);
 
-            t += swatSpeed * Time.deltaTime;
-           
-            hand.position = BezierCurze(startPos, swatPos, t*t);
-
-            if (Vector3.Distance(hand.position, swatPos) < 0.1)
+            if (!reachedTarget)
             {
-                hand.position = swatPos;
-               
-                startPos = hand.position;
-                StartCoroutine(SwatCoroutine());
+                t += swatSpeed * Time.unscaledDeltaTime;
+
+                hand.position = BezierCurze(startPos, swatPos, t * t);
+
+                if (Vector3.Distance(hand.position, swatPos) < 0.05)
+                {
+                   
+                    hand.position = swatPos;
+                    //startPos = hand.position;
+                   
+                
+
+                    reachedTarget = true;
+                   
+                 
+                   
+
+                }
             }
-         
+            else
+            {
+                //t += swatSpeed * Time.unscaledDeltaTime;
+
+                // hand.position = BezierCurze(startPos, hand.right, t * t);
+                // hand.position = direction * t;
+                //hand.position = hand.position + hand.right * t;
+            }
+            StartCoroutine(SwatCoroutine());
 
         }
-      
-      
+
+        lastFramePos = hand.position;
         
     }
 
@@ -90,25 +114,28 @@ public class Hand : MonoBehaviour
        
         Vector3 readyDirNorm =(readyPos.position - hand.position).normalized;
 
-        hand.position = hand.position + readyDirNorm * liftHandSpeed * Time.deltaTime;
+        hand.position = hand.position + readyDirNorm * liftHandSpeed * Time.unscaledDeltaTime;
 
         if(Vector3.Distance(hand.position, readyPos.position) < 0.05f && !swat) //magic number indtil videre
         {
             swat = true;
             swatPos = target.position;
             startPos = hand.position;
+            overShoot = target.position * 1.2f; 
             t = 0;
         }
     }
     IEnumerator SwatCoroutine()
     {
         
-        yield return new WaitForSeconds(2); //magic number
+        float scale = Time.timeScale;
+        yield return new WaitForSeconds(2f*scale); //magic number
         swat = false;
         coolDown = true;
        
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(2f*scale);
         coolDown = false;
+        reachedTarget = false;
         
     }
  
