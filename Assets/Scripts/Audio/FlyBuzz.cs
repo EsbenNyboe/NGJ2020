@@ -5,8 +5,15 @@ using UnityEngine;
 public class FlyBuzz : MonoBehaviour
 {
     AudioSource audioSource;
-    Vector3 lerpin;
+    float pitch;
     Vector3 vel;
+    Vector3 acc;
+    Vector3 lerpin;
+
+    float pitchingYspeed;
+    float pitchingZspeed;
+    float pitchingAccX;
+    float pitching;
 
     // Start is called before the first frame update
     void Start()
@@ -18,8 +25,8 @@ public class FlyBuzz : MonoBehaviour
     void Update()
     {
         vel = FlyController2.flyVelocity;
-
-        audioSource.pitch = 1 + lerpin.y;
+        acc = FlyController2.flyAcceleration;
+        audioSource.pitch = pitch;
 
         if (audioSource.pitch > 1.4f)
         {
@@ -30,11 +37,40 @@ public class FlyBuzz : MonoBehaviour
             audioSource.pitch = 0.7f;
         }
 
-        lerpin = Vector3.Lerp(lerpin, vel, 0.0001f);
-//        Debug.Log("Lerp: " + lerpin.y);
-//        Debug.Log("speed: " + FlyController2.speed);
-//        Debug.Log("vely: " + vel.y);
+        Oldie();
+//        NewFailOfTiredness();
 
-//        Debug.Log("acc: " + FlyController2.flyAcceleration);
+    }
+
+    private void NewFailOfTiredness()
+    {
+        pitchingYspeed = Mathf.Lerp(pitchingYspeed, vel.y, 0.0001f);
+        pitch = 1 + pitchingYspeed;
+        //UpdatePitching(pitchingYspeed, -1f, 2);
+        pitchingZspeed = Mathf.Lerp(pitchingZspeed, vel.z, 0.0001f);
+//        pitch = Mathf.Lerp(pitch, pitchingZspeed, 0.);
+            //UpdatePitching(pitchingZspeed, -1, 2);
+        pitchingAccX = Mathf.Lerp(pitchingAccX, acc.x, 0.005f);
+        UpdatePitching(pitchingAccX, -1, 2);
+
+
+        //        pitch = 1 + pitchingYspeed + pitchingZspeed + pitchingAccX;
+    }
+
+    private void UpdatePitching(float pitchingParameter, float pitchMin, float pitchMax)
+    {
+        pitching = Mathf.Lerp(pitching, pitchingParameter, 0.5f);
+       
+        if (pitchingParameter > pitchMin && pitchingParameter < pitchMax)
+        {
+            
+        }
+    }
+
+    private void Oldie()
+    {
+        lerpin = Vector3.Lerp(lerpin, vel, 0.0001f);
+        pitch = 1 + lerpin.y;
+        pitch = Mathf.Lerp(pitch, (acc.x + acc.z), 0.005f);
     }
 }
