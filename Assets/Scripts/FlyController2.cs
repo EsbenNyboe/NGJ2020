@@ -28,7 +28,7 @@ public class FlyController2 : MonoBehaviour
     Vector3 velocity, desiredVelocity;
 
     public static Vector3 flyVelocity;
-    public static float flyAcceleration;
+    public static Vector3 flyAcceleration;
 
     public static float speed = 0;
 
@@ -160,6 +160,7 @@ public class FlyController2 : MonoBehaviour
     {
         float xDiff;
         float zDiff;
+        float yDiff;
 
         if (desiredVelocity.x > currentXVelocity)
         {
@@ -189,8 +190,13 @@ public class FlyController2 : MonoBehaviour
             xDiff = 0;
         }
 
-        Vector3 velocityDiff = new Vector3(xDiff, zDiff, jumpInput - velocity.y);
+        yDiff = jumpInput - velocity.y;
 
-        flyAcceleration = desiredVelocity.x - currentXVelocity + desiredVelocity.z - currentZVelocity + jumpInput - velocity.y;
+        if (desiredVelocityY == 0)
+        {
+            yDiff = 0;
+        }
+
+        Vector3 velocityDiff = new Vector3(xDiff, yDiff, zDiff);
     }
 }
