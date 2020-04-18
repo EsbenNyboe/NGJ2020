@@ -29,6 +29,7 @@ public class Hand : MonoBehaviour
     public float homingUntilDistance;
     public float swatTime;
     public float cooldownTime;
+    Projector shadow;
    
     // Start is called before the first frame update
     void Start()
@@ -40,14 +41,15 @@ public class Hand : MonoBehaviour
         readyPosHori = GameObject.FindObjectOfType<readyPosHorizontal>().GetComponent<Transform>();
         lastFramePos = hand.position;
         fly = GameObject.FindObjectOfType<FlyController2>();
-
+        shadow = gameObject.GetComponentInChildren<Projector>();
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+        shadow.transform.LookAt(target.transform);
         distanceToTarget = Vector3.Distance(target.position, spine.position);
+        shadow.orthographicSize = 10f - distanceToTarget;
         if(distanceToTarget< distanceThreshold)
         {
             // The step size is equal to speed times frame time.
