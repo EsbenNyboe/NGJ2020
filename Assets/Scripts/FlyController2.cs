@@ -9,6 +9,9 @@ public class FlyController2 : MonoBehaviour
         noAcc, constAcc, LinAccBoost, QuadAccBoost
     }
 
+    //grounded på loft - hvad gør space?
+
+    //grounded orientering.
 
     [SerializeField, Range(0f, 10f)]
     float maxSpeed = 0.10f;
@@ -50,6 +53,9 @@ public class FlyController2 : MonoBehaviour
 
     bool turnFly = false;
     public static bool grounded = false;
+
+
+    public Transform test;
 
     void Awake()
     {
@@ -129,7 +135,7 @@ public class FlyController2 : MonoBehaviour
             currentStamina = Mathf.Clamp(currentStamina - Time.unscaledDeltaTime / staminaFlyTime, 0, 1);
         }
 
-       // print(currentStamina);
+        print(currentStamina);
 
         Grounding();
 
@@ -204,9 +210,11 @@ public class FlyController2 : MonoBehaviour
                 break;
         }
 
-        
-        Vector3 zAxis = Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up);
-        Vector3 xAxis = cam.transform.right;
+
+        //Vector3 zAxis = Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up);
+        //Vector3 xAxis = cam.transform.right;
+        Vector3 zAxis = transform.forward;
+        Vector3 xAxis = transform.right;
 
         float currentXVelocity = Vector3.Dot(velocity, xAxis);
         float currentZVelocity = Vector3.Dot(velocity, zAxis);
@@ -248,8 +256,6 @@ public class FlyController2 : MonoBehaviour
         if (jumpInput != 0 && velocity.y != 0 && currentStamina != 0)
         {
             velocity.y = Mathf.MoveTowards(velocity.y, Mathf.Clamp(jumpInput, -1, 1) * maxYSpeed, Time.unscaledDeltaTime * Yacceleration * 10f);
-
-
         }
         else if (velocity.y > 0)
         {
@@ -299,6 +305,10 @@ public class FlyController2 : MonoBehaviour
             desiredAngleX = landedOrientation.eulerAngles.x;
             desiredAngleY = body.transform.localRotation.y - 90;
             desiredAngleZ = landedOrientation.eulerAngles.z;
+
+            Debug.DrawRay(transform.position, hit.normal);
+            Debug.DrawRay(transform.position, landedForward, Color.yellow);
+            test.localRotation = landedOrientation;
         }
         else
         {

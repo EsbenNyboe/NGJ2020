@@ -23944,7 +23944,8 @@ MonoBehaviour:
   maxYSpeed: 5.39
   Yacceleration: 2.1
   accType: 2
-  maxStamina: 5
+  staminaChargeTime: 1
+  staminaFlyTime: 4
   flyBody: {fileID: 1351070860}
 --- !u!4 &605902251
 Transform:

@@ -182,9 +182,8 @@ public class FlyCamera : MonoBehaviour
     private void MoveCamera()
     {
 
-
-        if (Input.GetMouseButton(1) || Input.GetMouseButton(0))
-        {
+        //if (Input.GetMouseButton(1) || Input.GetMouseButton(0))
+        //{
             xDeg += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
             yDeg -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
 
@@ -198,7 +197,7 @@ public class FlyCamera : MonoBehaviour
 
             rotation = Quaternion.Lerp(currentRotation, desiredRotation, Time.unscaledDeltaTime * zoomDampening);
             transform.rotation = rotation;
-        }
+        //}
 
 
         desiredDistance -= Input.GetAxis("Mouse ScrollWheel") * Time.unscaledDeltaTime * zoomRate * Mathf.Abs(desiredDistance);
