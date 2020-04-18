@@ -1136,6 +1136,8 @@ MonoBehaviour:
   maxYSpeed: 4.43
   Yacceleration: 2.1
   accType: 2
+  staminaChargeTime: 4
+  staminaFlyTime: 20
   flyBody: {fileID: 1351070860}
 --- !u!4 &605902251
 Transform:
@@ -1150,6 +1152,7 @@ Transform:
   m_Children:
   - {fileID: 568811071}
   - {fileID: 1351070860}
+  - {fileID: 2073701605484039162}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4479,3 +4482,78 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137978393}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &2073701605484039161
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 605902251}
+    m_Modifications:
+    - target: {fileID: 6004368945043668007, guid: 32dd681efe5fbb143923ee6e7360df90,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6004368945043668007, guid: 32dd681efe5fbb143923ee6e7360df90,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6004368945043668007, guid: 32dd681efe5fbb143923ee6e7360df90,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6004368945043668007, guid: 32dd681efe5fbb143923ee6e7360df90,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6004368945043668007, guid: 32dd681efe5fbb143923ee6e7360df90,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6004368945043668007, guid: 32dd681efe5fbb143923ee6e7360df90,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6004368945043668007, guid: 32dd681efe5fbb143923ee6e7360df90,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6004368945043668007, guid: 32dd681efe5fbb143923ee6e7360df90,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6004368945043668007, guid: 32dd681efe5fbb143923ee6e7360df90,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6004368945043668007, guid: 32dd681efe5fbb143923ee6e7360df90,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6004368945043668007, guid: 32dd681efe5fbb143923ee6e7360df90,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7512484794157890906, guid: 32dd681efe5fbb143923ee6e7360df90,
+        type: 3}
+      propertyPath: m_Name
+      value: Fly Sound
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 32dd681efe5fbb143923ee6e7360df90, type: 3}
+--- !u!4 &2073701605484039162 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6004368945043668007, guid: 32dd681efe5fbb143923ee6e7360df90,
+    type: 3}
+  m_PrefabInstance: {fileID: 2073701605484039161}
+  m_PrefabAsset: {fileID: 0}
