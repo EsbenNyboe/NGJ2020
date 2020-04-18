@@ -24,6 +24,27 @@ public class AudioEvent: MonoBehaviour
         voice = GetComponent<AudioSource>();
     }
 
+    public void PlaySound()
+    {
+        selectedFile = Random.Range(0, sound.Length);
+        voice.clip = sound[selectedFile].soundFile;
+
+        if (sound[selectedFile].enableParameters == true)
+        {
+            voice.pitch = Random.Range(sound[selectedFile].pitch.minValue, sound[selectedFile].pitch.maxValue);
+            voice.volume = sound[selectedFile].volume;
+        }
+        else // replace this with "else: soundFile inherits its parameters from the AudioEvent"
+        {
+            voice.pitch = 1;
+            voice.volume = 1;
+        }
+        voice.Play();
+    }
+    public void StopSound()
+    {
+        voice.Stop();
+    }
     public void PlayTheSound(AudioSource audioSource)
     {
         if (audioSource != null)

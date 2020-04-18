@@ -12,6 +12,7 @@ public class FlyController2 : MonoBehaviour
     //grounded på loft - hvad gør space?
 
     //grounded orientering.
+    public Transform test;
 
     [SerializeField, Range(0f, 10f)]
     float maxSpeed = 0.10f;
@@ -53,7 +54,7 @@ public class FlyController2 : MonoBehaviour
 
     bool turnFly = false;
     public static bool grounded = false;
-
+    bool leaveGround = false;
 
     void Awake()
     {
@@ -65,7 +66,9 @@ public class FlyController2 : MonoBehaviour
 
     void Update()
     {
-        Debug.DrawRay(transform.position, -Vector3.up*0.01f);
+
+        print(grounded);
+            
         HandleInput();
 
         speed = body.velocity.magnitude;
@@ -83,13 +86,14 @@ public class FlyController2 : MonoBehaviour
 
     private void HandleInput()
     {
+
         Vector2 playerInput;
         playerInput.x = Input.GetAxisRaw("Horizontal");
         playerInput.y = Input.GetAxisRaw("Vertical");
 
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
 
-        if (grounded )
+        if (grounded)
         {
             desiredVelocity = Vector3.zero;
         }
@@ -105,6 +109,11 @@ public class FlyController2 : MonoBehaviour
         if (Input.GetAxis("Jump") != 0)
         {
             jumpInput = Input.GetAxis("Jump");
+
+            if (grounded)
+            {
+                leaveGround = true;
+            }
         }
         else if (Input.GetKey(KeyCode.LeftControl))
         {
@@ -125,6 +134,7 @@ public class FlyController2 : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         if (grounded)
         {
             currentStamina = Mathf.Clamp(currentStamina + Time.unscaledDeltaTime / staminaChargeTime,0,1);
@@ -168,7 +178,7 @@ public class FlyController2 : MonoBehaviour
             {
                 //print(hit.normal*100);
 
-                landedForward = -transform.right;
+                landedForward = cam.transform.forward;
 
                 grounded = true;
             }
@@ -227,6 +237,12 @@ public class FlyController2 : MonoBehaviour
             RotateChild(currentXVelocity, currentZVelocity);
 
         }
+
+        if (leaveGround)
+        {
+            velocity += hit.normal*Time.unscaledDeltaTime*100;
+            leaveGround = false;
+        }
     }
 
     private void CalculateXZVelocity(float accelerationScaled, Vector3 zAxis, Vector3 xAxis, float currentXVelocity, float currentZVelocity)
@@ -247,7 +263,7 @@ public class FlyController2 : MonoBehaviour
     {
         //float cameraAngleCompensation = Vector3.Cross(cam.transform.forward, transform.forward).magnitude;
 
-        if (jumpInput != 0 && velocity.y != 0 && currentStamina != 0)
+        if (jumpInput != 0  && currentStamina != 0)
         {
             velocity.y = Mathf.MoveTowards(velocity.y, Mathf.Clamp(jumpInput, -1, 1) * maxYSpeed, Time.unscaledDeltaTime * Yacceleration * 10f);
         }
@@ -270,7 +286,12 @@ public class FlyController2 : MonoBehaviour
         else
         {
             velocity.y -= Time.unscaledDeltaTime * 0.2f;
-            velocity.y += 0.1f * (Mathf.PerlinNoise(68, 562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
+
+            if (!grounded)
+            {
+                velocity.y += 0.1f * (Mathf.PerlinNoise(68, 562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
+
+            }
 
             if (currentStamina == 0)
             {
@@ -287,33 +308,39 @@ public class FlyController2 : MonoBehaviour
     {
         CalculateAcceleration(currentXVelocity, currentZVelocity);
 
-        float desiredAngleX;
-        float desiredAngleZ;
-        float desiredAngleY;
+        float desiredAngleX = body.transform.localRotation.x;
+        float desiredAngleZ = body.transform.localRotation.y;
+        float desiredAngleY = body.transform.localRotation.z;
 
         if (grounded)
         {
-            Quaternion landedOrientation = Quaternion.LookRotation(landedForward, hit.normal); //mærkelig "forward" fordi fluen vender mærkeligt (langs +x)
-            //print(hit.normal);
-
-            Debug.DrawRay(hit.point, hit.normal, Color.blue);
-            desiredAngleX = landedOrientation.eulerAngles.x;
-            desiredAngleY = body.transform.localRotation.y - 90;
-            desiredAngleZ = landedOrientation.eulerAngles.z;
-
-            Debug.DrawRay(transform.position, hit.normal, Color.black);
-            Debug.DrawRay(transform.position, landedForward, Color.yellow);
+            Vector3 newForward = Vector3.ProjectOnPlane(landedForward, hit.normal);
+            Quaternion landedOrientation = Quaternion.LookRotation(newForward, hit.normal); //mærkelig "forward" fordi fluen vender mærkeligt (langs +x)
             
+            
+            
+            //print(hit.normal);
+            //test.transform.rotation = landedOrientation;
+
+            //desiredAngleX = landedOrientation.eulerAngles.x;
+            //desiredAngleY = body.transform.localRotation.y - 90;
+            //desiredAngleZ = landedOrientation.eulerAngles.z;
+
+            //Debug.DrawRay(transform.position, hit.normal, Color.black);
+            //Debug.DrawRay(transform.position, landedForward, Color.yellow);
+            //body.transform.LookAt(body.position + newForward, hit.normal);
+            body.transform.localRotation = landedOrientation;
+
         }
         else
         {
             desiredAngleX = -desiredVelocity.x * 14.5f;
-            desiredAngleZ = -desiredVelocity.z * 14.5f;
-            desiredAngleY = cam.transform.localRotation.y - 90;
+            desiredAngleZ = desiredVelocity.z * 14.5f;
+            desiredAngleY = cam.transform.localRotation.y;
         }
 
-        float newXrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.x, desiredAngleX, Time.unscaledDeltaTime * 80);
-        float newZrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.z, desiredAngleZ, Time.unscaledDeltaTime * 80);
+        float newXrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.x, desiredAngleZ, Time.unscaledDeltaTime * 80);
+        float newZrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.z, desiredAngleX, Time.unscaledDeltaTime * 80);
        
         flyBody.transform.localRotation = Quaternion.Euler(newXrotation, desiredAngleY, newZrotation);
     }
