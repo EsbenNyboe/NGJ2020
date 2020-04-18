@@ -154,7 +154,7 @@ public class Hand : MonoBehaviour
         {
             GameManager.Death();
         }
-        if (collision.gameObject.GetComponentInChildren<AudioEvent>() != null)
+        if (collision.gameObject.GetComponentInChildren<AudioEvent>() != null && collision.gameObject.tag =="Collision")
         {
             print("audio collision detected");
        

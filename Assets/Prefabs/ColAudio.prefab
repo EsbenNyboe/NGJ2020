@@ -46,11 +46,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sound:
   - soundFile: {fileID: 8300000, guid: 9a2eaecb0134d5443ac7b73b18272577, type: 3}
-    enableParameters: 0
+    enableParameters: 1
     pitch:
-      minValue: 0.8456351
-      maxValue: 1.1591036
-    volume: 0
+      minValue: 0.7071259
+      maxValue: 1.0133045
+    volume: 1
 --- !u!82 &8086282187603672661
 AudioSource:
   m_ObjectHideFlags: 0

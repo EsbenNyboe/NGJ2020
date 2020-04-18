@@ -14,18 +14,15 @@ public class SoundManager : MonoBehaviour
     }
     public void PlayCollision(AudioEvent audioEvent)
     {
-        print("collision sound playing");
-        print(audioEvent.gameObject.name);
-
         colIndex++;
-        if (colIndex == numCollVoices - 1)
+        if (colIndex == numCollVoices)
             colIndex = 0;
 
         collisionVoices[colIndex] = audioEvent;
         if (colIndex == numCollVoices - 1)
             collisionVoices[0].StopSound();
         else if(collisionVoices[colIndex+1] != null)
-            collisionVoices[colIndex + 1].StopSound();
+            collisionVoices[colIndex + 1].StopSound(); 
         audioEvent.PlaySound();
     }
 
