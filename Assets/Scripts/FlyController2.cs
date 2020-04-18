@@ -73,8 +73,7 @@ public class FlyController2 : MonoBehaviour
 
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
 
-        flyAcceleration = playerInput.magnitude + jumpInput;
-
+        
         desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * maxSpeed;
 
         if (Input.GetMouseButton(1))
@@ -143,7 +142,7 @@ public class FlyController2 : MonoBehaviour
         }
         else
         {
-            
+
             print(flyAcceleration);
 
             float newXVelocity = Mathf.MoveTowards(currentXVelocity, desiredVelocity.x, accelerationScaled);
@@ -151,29 +150,47 @@ public class FlyController2 : MonoBehaviour
 
             velocity += xAxis * (newXVelocity - currentXVelocity) + zAxis * (newZVelocity - currentZVelocity);
 
+            velocity.y = Mathf.MoveTowards(velocity.y, jumpInput, Time.unscaledDeltaTime * Yacceleration * 10f);
 
-
-            velocity.y = Mathf.MoveTowards(velocity.y, jumpInput, Time.unscaledDeltaTime*Yacceleration*10f);
-
-            /*
-            if (jumpInput != 0)
-            {
-                velocity.y = jumpInput*Time.unscaledDeltaTime * 600;
-            }
-
-            if(velocity.y > 0)
-            {
-                velocity.y -= 70f * Time.unscaledDeltaTime;
-            }
-            else
-            {
-                velocity.y -= 4f * Time.unscaledDeltaTime;
-            }
-            */
-            
-            
-
+            CalculateAcceleration(currentXVelocity, currentZVelocity);
         }
     }
 
+    private void CalculateAcceleration(float currentXVelocity, float currentZVelocity)
+    {
+        float xDiff;
+        float zDiff;
+
+        if (desiredVelocity.x > currentXVelocity)
+        {
+            xDiff = desiredVelocity.x - currentXVelocity;
+        }
+        else
+        {
+            xDiff = currentXVelocity - desiredVelocity.x;
+        }
+
+        if (desiredVelocity.z > currentZVelocity)
+        {
+            zDiff = desiredVelocity.z - currentZVelocity;
+        }
+        else
+        {
+            zDiff = -desiredVelocity.z + currentZVelocity;
+        }
+
+        if (desiredVelocity.z == 0)
+        {
+            zDiff = 0;
+        }
+
+        if (desiredVelocity.x == 0)
+        {
+            xDiff = 0;
+        }
+
+        Vector3 velocityDiff = new Vector3(xDiff, zDiff, jumpInput - velocity.y);
+
+        flyAcceleration = desiredVelocity.x - currentXVelocity + desiredVelocity.z - currentZVelocity + jumpInput - velocity.y;
+    }
 }
