@@ -198,5 +198,6 @@ public class FlyController2 : MonoBehaviour
         }
 
         Vector3 velocityDiff = new Vector3(xDiff, yDiff, zDiff);
+        flyAcceleration = velocityDiff;
     }
 }
