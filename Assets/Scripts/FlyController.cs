@@ -11,7 +11,6 @@ public class FlyController : MonoBehaviour
     GameObject lookTarget;
     
     Vector3 startRight;
-    bool changeRight = true;
 
     Camera cam;
     Vector3 newPos;

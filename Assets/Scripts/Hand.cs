@@ -24,6 +24,7 @@ public class Hand : MonoBehaviour
     Vector3 overShoot;
     Transform currentReadyPos;
     Vector3 lastFramePos;
+    Vector3 lastFrameTargetPos;
     FlyController2 fly;
     public float attackTimeModifier;
     public float homingUntilDistance;
@@ -32,6 +33,8 @@ public class Hand : MonoBehaviour
     Projector shadow;
     Transform restPos;
    public bool resetting;
+
+    
    
     // Start is called before the first frame update
     void Start()
@@ -42,6 +45,7 @@ public class Hand : MonoBehaviour
         readyPosVert = GameObject.FindObjectOfType<readyPos>().GetComponent<Transform>();
         readyPosHori = GameObject.FindObjectOfType<readyPosHorizontal>().GetComponent<Transform>();
         lastFramePos = hand.position;
+        lastFrameTargetPos = target.position;
         restPos = GameObject.FindObjectOfType<restPos>().GetComponent<Transform>();
         fly = GameObject.FindObjectOfType<FlyController2>();
         shadow = gameObject.GetComponentInChildren<Projector>();
@@ -59,7 +63,7 @@ public class Hand : MonoBehaviour
             //hand.right = (hand.position - lastFramePos);
             t += swatSpeed * attackTimeModifier * Time.unscaledDeltaTime;
             hand.position = BezierCurve(startPos, restPos.position, t * t);
-            if(Vector3.Distance(restPos.position, hand.position) < 0.5f)
+            if(Vector3.Distance(restPos.position, hand.position) < 0.3f)
             {
                 resetting = false;
             }
@@ -80,16 +84,16 @@ public class Hand : MonoBehaviour
             }
             if (swat)
             {
-                //Vector3 targetDir = (swatPos - hand.position).normalized;
-
-                // hand.position = hand.position + targetDir * swatSpeed * Time.deltaTime;
+               
                 hand.right = -(hand.position - lastFramePos);
 
+                //homing until within certain distance
                 if (Vector3.Distance(target.position, hand.position) > homingUntilDistance && !reachedTarget)
                 {
-                    swatPos = target.position;
-                    overShoot = target.position + (target.position - hand.position).normalized;
+                    swatPos = lastFrameTargetPos;
+                    overShoot = lastFrameTargetPos + (lastFrameTargetPos - hand.position).normalized;
                 }
+
 
                 t += swatSpeed * attackTimeModifier * Time.unscaledDeltaTime;
                 if (currentReadyPos == readyPosVert) //Vertical curves
@@ -106,18 +110,18 @@ public class Hand : MonoBehaviour
                     else
                         hand.position = BezierCurve2(swatPos, overShoot, 2 * t);
                 }
-                if (Vector3.Distance(hand.position, swatPos) < 0.3f && !reachedTarget)
+                //hvornår har den nået target
+                if (Vector3.Distance(hand.position, swatPos) < 0.01f && !reachedTarget) 
                 {
 
-                    // hand.position = swatPos;
-                    // startPos = swatPos;
-                    //swatPos = overShoot;
+                   
                     reachedTarget = true;
                     t = 0;
                     StopAllCoroutines();
                     StartCoroutine(SwatCoroutine());
                 }
-                if(Vector3.Distance(hand.position, overShoot) < 0.3f && reachedTarget &&!resetting)
+                //hvor tæt er den på overshoot position så den kan resette
+                if (Vector3.Distance(hand.position, overShoot) < 0.01f && reachedTarget && !resetting)
                 {
                     resetting = true;
                     t = 0;
@@ -126,11 +130,12 @@ public class Hand : MonoBehaviour
                     StartCoroutine(CoolDownCoroutine());
                 }
 
-               
+
 
             }
         }
         lastFramePos = hand.position;
+        lastFrameTargetPos = target.position;
         
     }
     public void OnCollisionEnter(Collision collision)
@@ -144,6 +149,10 @@ public class Hand : MonoBehaviour
             startPos = hand.position;
             StopAllCoroutines();
             StartCoroutine(CoolDownCoroutine());   
+        }
+        if(collision.gameObject.GetComponent<Target>() != null)
+        {
+            GameManager.Death();
         }
       
     }
