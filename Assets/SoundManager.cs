@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    public static AudioEvent[] collisionVoices;
+    public AudioEvent[] collisionVoices;
     public int numCollVoices;
     public int colIndex =-1;
     // Start is called before the first frame update
@@ -12,7 +12,7 @@ public class SoundManager : MonoBehaviour
     {
         collisionVoices = new AudioEvent[numCollVoices];
     }
-    public  void PlayCollision(AudioEvent audioEvent)
+    public void PlayCollision(AudioEvent audioEvent)
     {
         print("collision sound playing");
         print(audioEvent.gameObject.name);
