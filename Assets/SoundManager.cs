@@ -5,18 +5,22 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     public static AudioEvent[] collisionVoices;
-    public static int numCollVoices;
-    static int colIndex =-1;
+    public int numCollVoices;
+    public int colIndex =-1;
     // Start is called before the first frame update
     void Start()
     {
-        
+        collisionVoices = new AudioEvent[numCollVoices];
     }
-    public static void PlayCollision(AudioEvent audioEvent)
+    public  void PlayCollision(AudioEvent audioEvent)
     {
+        print("collision sound playing");
+        print(audioEvent.gameObject.name);
+
         colIndex++;
         if (colIndex == numCollVoices - 1)
             colIndex = 0;
+
         collisionVoices[colIndex] = audioEvent;
         if (colIndex == numCollVoices - 1)
             collisionVoices[0].StopSound();

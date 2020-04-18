@@ -5,9 +5,12 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static bool godMode;
+    public bool godModeEnabled;
     public void Awake()
     {
-        DontDestroyOnLoad(this);
+     
+        if (godModeEnabled)
+            godMode = true;
     }
     public static void Death()
     {

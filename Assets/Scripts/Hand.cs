@@ -154,13 +154,25 @@ public class Hand : MonoBehaviour
         {
             GameManager.Death();
         }
-        if(collision.gameObject.GetComponentInChildren<AudioEvent>() && collision.gameObject.tag =="Collision")
+        if (collision.gameObject.GetComponent<AudioEvent>() != null)
         {
-            AudioEvent audioEvent = collision.gameObject.GetComponentInChildren<AudioEvent>();
-            SoundManager.PlayCollision(audioEvent);
+            print("audio collision detected");
+       
+            AudioEvent audioEvent = collision.gameObject.GetComponent<AudioEvent>();
+            FindObjectOfType<SoundManager>().PlayCollision(audioEvent);
         }
-      
+
+
     }
+    //public void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.tag == "Collision")
+    //    {
+    //        print("audio collision detected");
+    //        AudioEvent audioEvent = other.gameObject.GetComponentInChildren<AudioEvent>();
+    //        SoundManager.PlayCollision(audioEvent);
+    //    }
+    //}
 
     Vector3 BezierCurve(Vector3 a, Vector3 d , float t) // kan optimereres
     {

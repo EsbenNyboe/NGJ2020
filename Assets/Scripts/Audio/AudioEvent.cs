@@ -12,7 +12,7 @@ public class AudioEvent: MonoBehaviour
     {
         public AudioClip soundFile;
         public bool enableParameters;
-        [MinMaxRange(1, 2)]
+        [MinMaxRange(0, 2)]
         public RangedFloat pitch;
         [Range(0, 1)]
         public float volume;
