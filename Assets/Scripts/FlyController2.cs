@@ -25,24 +25,25 @@ public class FlyController2 : MonoBehaviour
     [SerializeField]
     AccelerationType accType = default;
 
-    Vector3 velocity, desiredVelocity;
+    public float maxStamina = 5;
+    
     public Transform flyBody;
-    public static Vector3 flyVelocity;
-    public static Vector3 flyAcceleration;
+    
+    public static Vector3 flyAcceleration, flyVelocity;
 
     public static float speed = 0;
 
-    Vector3 forwardDir;
+    Vector3 velocity, desiredVelocity, forwardDir, landedForward;
+    //Quaternion landedRotation;
 
-    float startAcceleration;
-    float jumpInput;
-    float desiredVelocityY;
+    float startAcceleration, jumpInput, desiredVelocityY;
 
-
+    RaycastHit hit;
     Rigidbody body;
     Camera cam;
 
     bool turnFly = false;
+    public static bool grounded = false;
 
     void Awake()
     {
@@ -54,14 +55,31 @@ public class FlyController2 : MonoBehaviour
 
     void Update()
     {
+        Debug.DrawRay(transform.position, -Vector3.up*0.01f);
+        HandleInput();
+
+        speed = body.velocity.magnitude;
+        flyVelocity = body.velocity;
+    }
+
+    private void HandleInput()
+    {
         Vector2 playerInput;
         playerInput.x = Input.GetAxisRaw("Horizontal");
         playerInput.y = Input.GetAxisRaw("Vertical");
 
-        speed = body.velocity.magnitude;
-        flyVelocity = body.velocity;
+        playerInput = Vector2.ClampMagnitude(playerInput, 1f);
 
-        if(Input.GetAxis("Jump") != 0)
+        if (grounded)
+        {
+            desiredVelocity = Vector3.zero;
+        }
+        else
+        {
+            desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * maxSpeed;
+        }
+
+        if (Input.GetAxis("Jump") != 0)
         {
             jumpInput = Input.GetAxis("Jump");
         }
@@ -74,25 +92,20 @@ public class FlyController2 : MonoBehaviour
             jumpInput = 0;
         }
 
-
-        playerInput = Vector2.ClampMagnitude(playerInput, 1f);
-
-        
-        desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * maxSpeed;
-
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1) && grounded == false)
         {
             turnFly = true;
-            
+
         }
         else { turnFly = false; }
-
-
     }
 
     private void FixedUpdate()
     {
+        Grounding();
+
         MoveSphere();
+
         if (turnFly)
         {
             forwardDir = Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up);
@@ -100,6 +113,36 @@ public class FlyController2 : MonoBehaviour
         }
         
         UpdateState();
+    }
+
+    private void Grounding()
+    {
+        grounded = false;
+        GetComponentInChildren<Renderer>().material.SetColor("_Color", Color.red);
+
+        for (int i = 0; i < 24; i++)
+        {
+            float xangle = Mathf.Cos(i * 30*Mathf.PI*2/360);
+            float yangle = Mathf.Sin(i * 30 * Mathf.PI * 2 / 360);
+            
+            Vector3 dir = new Vector3(xangle, -yangle, 0);
+            if(i > 11)
+            {
+                dir = new Vector3(0, -yangle, xangle);
+            }
+
+            if(Physics.Raycast(transform.position, dir, out hit, 0.03f) && grounded == false)
+            {
+                print(hit.normal*100);
+
+                landedForward = -transform.right;
+
+                GetComponentInChildren<Renderer>().material.SetColor("_Color", Color.green);
+                grounded = true;
+            }
+                Debug.DrawRay(transform.position, dir*0.02f, Color.red);
+        }
+
     }
 
     private void UpdateState()
@@ -131,9 +174,7 @@ public class FlyController2 : MonoBehaviour
                 break;
         }
 
-        //Vector3 xAxis = transform.right;
-        //Vector3 zAxis = transform.forward;
-
+        
         Vector3 zAxis = Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up);
         Vector3 xAxis = cam.transform.right;
 
@@ -148,47 +189,74 @@ public class FlyController2 : MonoBehaviour
         }
         else
         {
+            CalculateXZVelocity(accelerationScaled, zAxis, xAxis, currentXVelocity, currentZVelocity);
+            CalculateYVelocity();
 
-            float newXVelocity = Mathf.MoveTowards(currentXVelocity, desiredVelocity.x, accelerationScaled);
-            float newZVelocity = Mathf.MoveTowards(currentZVelocity, desiredVelocity.z, accelerationScaled);
-
-            velocity += xAxis * (newXVelocity - currentXVelocity) + zAxis * (newZVelocity - currentZVelocity);
-
-            float cameraAngleCompensation = Vector3.Cross(cam.transform.forward, transform.forward).magnitude;
-
-            if(jumpInput != 0 && velocity.y != 0)
-            {
-                velocity.y = Mathf.MoveTowards(velocity.y, Mathf.Clamp(jumpInput, -1, 1) * maxYSpeed, Time.unscaledDeltaTime * Yacceleration * 10f);
-
-                
-            }
-            else if(velocity.y > 0)
-            {
-                //velocity.y -= Time.unscaledDeltaTime*4;
-                velocity.y += 0.1f*(Mathf.PerlinNoise(68, 562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
-                velocity.y *= 0.97f;
-            }
-            else
-            {
-                velocity.y -= Time.unscaledDeltaTime * 0.2f;
-                velocity.y += 0.1f*(Mathf.PerlinNoise(68, 562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
-                velocity.y *= 0.97f;
-            }
-
-
-            LocalRotation(currentXVelocity, currentZVelocity);
+            RotateChild(currentXVelocity, currentZVelocity);
 
         }
     }
 
-    private void LocalRotation(float currentXVelocity, float currentZVelocity)
+    private void CalculateXZVelocity(float accelerationScaled, Vector3 zAxis, Vector3 xAxis, float currentXVelocity, float currentZVelocity)
+    {
+        float newXVelocity = Mathf.MoveTowards(currentXVelocity, desiredVelocity.x, accelerationScaled);
+        float newZVelocity = Mathf.MoveTowards(currentZVelocity, desiredVelocity.z, accelerationScaled);
+
+        velocity += xAxis * (newXVelocity - currentXVelocity) + zAxis * (newZVelocity - currentZVelocity);
+    }
+
+    private void CalculateYVelocity()
+    {
+        //float cameraAngleCompensation = Vector3.Cross(cam.transform.forward, transform.forward).magnitude;
+
+        if (jumpInput != 0 && velocity.y != 0)
+        {
+            velocity.y = Mathf.MoveTowards(velocity.y, Mathf.Clamp(jumpInput, -1, 1) * maxYSpeed, Time.unscaledDeltaTime * Yacceleration * 10f);
+
+
+        }
+        else if (velocity.y > 0)
+        {
+            //velocity.y -= Time.unscaledDeltaTime*4;
+            velocity.y += 0.1f * (Mathf.PerlinNoise(68, 562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
+            velocity.y *= 0.97f;
+        }
+        else
+        {
+            velocity.y -= Time.unscaledDeltaTime * 0.2f;
+            velocity.y += 0.1f * (Mathf.PerlinNoise(68, 562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
+            velocity.y *= 0.97f;
+        }
+    }
+
+    private void RotateChild(float currentXVelocity, float currentZVelocity)
     {
         CalculateAcceleration(currentXVelocity, currentZVelocity);
 
-        float newXrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.x, -desiredVelocity.x * 4.5f, Time.unscaledDeltaTime * 80);
-        float newZrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.z, -desiredVelocity.z * 4.5f, Time.unscaledDeltaTime * 80);
-        print(newXrotation);
-        flyBody.transform.localRotation = Quaternion.Euler(newXrotation, cam.transform.localRotation.y - 90, newZrotation);
+        float desiredAngleX;
+        float desiredAngleZ;
+        float desiredAngleY;
+
+        if (grounded)
+        {
+            Quaternion landedOrientation = Quaternion.LookRotation(landedForward, hit.normal); //mærkelig "forward" fordi fluen vender mærkeligt (langs +x)
+            print(hit.normal);
+
+            desiredAngleX = landedOrientation.eulerAngles.x;
+            desiredAngleY = body.transform.localRotation.y - 90;
+            desiredAngleZ = landedOrientation.eulerAngles.z;
+        }
+        else
+        {
+            desiredAngleX = -desiredVelocity.x * 4.5f;
+            desiredAngleZ = -desiredVelocity.z * 4.5f;
+            desiredAngleY = cam.transform.localRotation.y - 90;
+        }
+
+        float newXrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.x, desiredAngleX, Time.unscaledDeltaTime * 80);
+        float newZrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.z, desiredAngleZ, Time.unscaledDeltaTime * 80);
+       
+        flyBody.transform.localRotation = Quaternion.Euler(newXrotation, desiredAngleY, newZrotation);
     }
 
     private void CalculateAcceleration(float currentXVelocity, float currentZVelocity)
