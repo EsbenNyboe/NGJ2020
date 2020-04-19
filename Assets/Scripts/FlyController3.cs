@@ -79,8 +79,7 @@ public class FlyController3 : MonoBehaviour
         {
             GetComponentInChildren<Renderer>().material.SetColor("_Color", Color.green);
         }
-
-        print(grounded);
+       
     }
 
     private void HandleInput()
@@ -319,12 +318,12 @@ public class FlyController3 : MonoBehaviour
         else
         {
             desiredAngleX = -desiredVelocity.x * 14.5f;
-            desiredAngleZ = desiredVelocity.z * 14.5f;
+            desiredAngleZ = desiredVelocity.z * 4.5f;
             desiredAngleY = cam.transform.localRotation.y;
         }
 
-        float newXrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.x, desiredAngleZ, Time.unscaledDeltaTime * 80);
-        float newZrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.z, desiredAngleX, Time.unscaledDeltaTime * 80);
+        float newXrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.x, desiredAngleX, Time.unscaledDeltaTime * 80);
+        float newZrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.z, -desiredAngleZ, Time.unscaledDeltaTime * 80);
 
         flyBody.transform.localRotation = Quaternion.Euler(newXrotation, desiredAngleY, newZrotation);
     }
