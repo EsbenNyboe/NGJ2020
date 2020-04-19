@@ -69,7 +69,6 @@ public class FlyController2 : MonoBehaviour
     void Update()
     {
 
-        
             
         HandleInput();
 
