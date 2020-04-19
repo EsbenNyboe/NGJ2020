@@ -10,13 +10,15 @@ public class FlyBuzz : MonoBehaviour
     Vector3 acc;
 
     float pitchingVel;
-    [Range(1, 10)]
+    [Range(1, 100)]
     public float pitchingVelPower;
 
     float pitchingAcc;
-    [Range(1, 10)]
-    public float pitchingAccPower;
-    
+    public float pitcAccPowUp; // pitchingAccPowerUp
+    public float pitcAccPowDown;
+
+    public float pitchingAccMax;
+
     [MinMaxRange(-0.5f, 0)]
     public RangedFloat resetBottom;
     private float resetBottomChosen;
@@ -30,7 +32,7 @@ public class FlyBuzz : MonoBehaviour
     public float volume;
     public float fadeSlope;
 
-    private bool isGrounded;
+    private bool notBuzzing;
 
     void Start()
     {
@@ -46,42 +48,43 @@ public class FlyBuzz : MonoBehaviour
         MicroPitching();
         LimitPitchMinMaxValues(0.7f, 1.5f);
 
+        Depletion();
+
         SwitchingStatesSmoothly(); // grounding and ungrounding smoothly
         audioSource.pitch = pitch;
 
-        switch(FlyController3.grounded)
+        switch (FlyController3.grounded)
         {
             case true:
-                if (isGrounded == false)
+                if (notBuzzing == false)
                 {
                     StateChangeGrounded();
                 }
                 break;
             case false:
-                if (isGrounded == true)
+                if (notBuzzing == true && FlyController3.currentStamina > 0)
                 {
                     StateChangeFlying();
                 }
                 break;
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.F)) 
+    private void Depletion()
+    {
+        if (FlyController3.grounded == false && FlyController3.currentStamina == 0)
         {
-            StateChangeFlying();
-        }
-        if (Input.GetKeyDown(KeyCode.G)) 
-        {
-            StateChangeGrounded();
+            notBuzzing = true;
         }
     }
 
     private void SwitchingStatesSmoothly()
     {
-        if (audioSource.volume > 0 && isGrounded == true)
+        if (audioSource.volume > 0 && notBuzzing == true)
         {
             audioSource.volume -= fadeSlope;
         }
-        if (audioSource.volume < volume && isGrounded == false)
+        if (audioSource.volume < volume && notBuzzing == false)
         {
             audioSource.volume += fadeSlope;
         }
@@ -89,7 +92,7 @@ public class FlyBuzz : MonoBehaviour
 
     public void StateChangeFlying() 
     {
-        isGrounded = false;
+        notBuzzing = false;
         audioSource.volume = volume;
         ResetPitch();
         //audioSource.UnPause();
@@ -97,7 +100,7 @@ public class FlyBuzz : MonoBehaviour
 
     public void StateChangeGrounded() 
     {
-        isGrounded = true;
+        notBuzzing = true;
         //audioSource.Pause();
     }
 
@@ -134,21 +137,46 @@ public class FlyBuzz : MonoBehaviour
         {
             pitchingVel = Mathf.Lerp(pitchingVel, vel.y, pitchingVelPower * 0.00001f);
         }
-
-        pitch = 1 + pitchingVel;
     }
 
     private void MicroPitching()
     {
         acc = FlyController3.flyAcceleration;
-        if (acc.x > acc.y)
+        float accXY;
+        if (acc.x*acc.x > acc.z*acc.z)
         {
-            pitchingAcc = acc.x;
+            accXY = acc.x;
         }
         else
         {
-            pitchingAcc = acc.y;
+            accXY = acc.z;
         }
-        pitch = Mathf.Lerp(pitch, pitchingAcc, pitchingAccPower*0.001f);
+
+        Debug.Log("accXY:" + accXY);
+
+        if (accXY == 0)
+        {
+            pitchingAcc = Mathf.Lerp(pitchingAcc, accXY, pitcAccPowDown * 0.01f);
+        }
+        else
+        {
+            pitchingAcc = Mathf.Lerp(pitchingAcc, accXY, pitcAccPowUp * 0.001f);
+        }
+
+        if (pitchingAcc > pitchingAccMax)
+        {
+            pitchingAcc = pitchingAccMax;
+        }
+
+        pitch = 1 + pitchingVel + pitchingAcc; 
     }
+
+    private void ChoosePositiveValue(ref float acc)
+    {
+        if (acc < 0)
+        {
+            acc = acc * -1;
+        }
+    }
+
 }
