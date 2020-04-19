@@ -10,7 +10,6 @@ public class FlyController3 : MonoBehaviour
         noAcc, constAcc, LinAccBoost, QuadAccBoost
     }
 
-
     [SerializeField, Range(0f, 10f)]
     float maxSpeed = 0.10f;
 
@@ -64,7 +63,8 @@ public class FlyController3 : MonoBehaviour
 
     void Update()
     {
-
+        print(grounded);
+        print(currentStamina);
 
         HandleInput();
 
@@ -136,7 +136,12 @@ public class FlyController3 : MonoBehaviour
         }
         else
         {
-            currentStamina = Mathf.Clamp(currentStamina - Time.unscaledDeltaTime / staminaFlyTime, 0, 1);
+            currentStamina -= Time.unscaledDeltaTime / staminaFlyTime;
+
+            if(currentStamina < 0.03f)
+            {
+                currentStamina = 0;
+            }
         }
 
 

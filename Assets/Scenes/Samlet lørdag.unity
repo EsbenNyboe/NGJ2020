@@ -2677,6 +2677,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fly
       objectReference: {fileID: 0}
+    - target: {fileID: 5817057297442901332, guid: 8c575ad802ef170429de4506f0bc2b1c,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.149
+      objectReference: {fileID: 0}
+    - target: {fileID: 7102687635944703114, guid: 8c575ad802ef170429de4506f0bc2b1c,
+        type: 3}
+      propertyPath: volume
+      value: 0.17
+      objectReference: {fileID: 0}
     - target: {fileID: 7512484793934853796, guid: 8c575ad802ef170429de4506f0bc2b1c,
         type: 3}
       propertyPath: m_IsActive
