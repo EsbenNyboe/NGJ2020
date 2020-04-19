@@ -16,8 +16,8 @@ public class SoundManager : MonoBehaviour
     }
     public void PlayCollision(AudioEvent audioEvent)
     {
-        print("collision sound playing");
-        print(audioEvent.gameObject.name);
+     //   print("collision sound playing");
+       // print(audioEvent.gameObject.name);
 
         colIndex++;
         if (colIndex == numCollVoices - 1)

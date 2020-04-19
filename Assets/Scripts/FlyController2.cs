@@ -84,7 +84,7 @@ public class FlyController2 : MonoBehaviour
             GetComponentInChildren<Renderer>().material.SetColor("_Color", Color.green);
         }
 
-        print(grounded);
+        //print(grounded);
     }
 
     private void HandleInput()

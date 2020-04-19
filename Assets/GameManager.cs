@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        Debug.Log(score);
+      //  Debug.Log(score);
     }
 
     public bool AddToScore(Collision other)

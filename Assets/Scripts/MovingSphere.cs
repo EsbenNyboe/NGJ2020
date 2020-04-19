@@ -242,7 +242,7 @@ public class MovingSphere : MonoBehaviour
 
         if (dot > 0f)
         {
-            print("snap NOW!");
+          //  print("snap NOW!");
             body.velocity = (velocity - hit.normal * dot).normalized * speed;
         }
     }
