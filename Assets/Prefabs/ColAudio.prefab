@@ -50,7 +50,7 @@ MonoBehaviour:
     pitch:
       minValue: 0.982988
       maxValue: 1.0133045
-    volume: 1
+    volume: 0.405
   - soundFile: {fileID: 8300000, guid: 9a2eaecb0134d5443ac7b73b18272577, type: 3}
     enableParameters: 1
     pitch:
