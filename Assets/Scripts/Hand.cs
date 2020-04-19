@@ -172,13 +172,18 @@ public class Hand : MonoBehaviour
             
             foreach (ContactPoint c in contactPoints)
             {
-                if (c.thisCollider.gameObject.tag == "AudioCollider")
+                
+                if(c.thisCollider.gameObject.tag != null)
                 {
-                    print("audio collision detected");
-                    play = true;
-                    break;
+                    if (c.thisCollider.gameObject.tag == "AudioCollider")
+                    {
+                        print("audio collision detected");
+                        play = true;
+                        break;
+                    }
                 }
             }
+                
             
             if (play && gameManager.AddToScore(collision)) //and add to score
             {
