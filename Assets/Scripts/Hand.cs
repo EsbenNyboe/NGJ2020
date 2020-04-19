@@ -32,7 +32,7 @@ public class Hand : MonoBehaviour
     public float cooldownTime;
     Projector shadow;
     Transform restPos;
-   public bool resetting;
+    public bool resetting;
 
     
    
@@ -209,8 +209,8 @@ public class Hand : MonoBehaviour
     Vector3 BezierCurve3(Vector3 a, Vector3 d, float t) // kan optimereres
     {
 
-        Vector3 b = a + 0.5f * Vector3.left;
-        Vector3 c = d + 0.5f * Vector3.left;
+        Vector3 b = a - 0.5f * Vector3.left;
+        Vector3 c = d - 0.5f * Vector3.left;
 
         Vector3 m = Vector3.Lerp(a, b, t);
         Vector3 n = Vector3.Lerp(b, c, t);
