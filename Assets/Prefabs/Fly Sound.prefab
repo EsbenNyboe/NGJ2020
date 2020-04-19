@@ -142,7 +142,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pitchingVelPower: 59
-  pitchingAccPower: 94.7
+  pitcAccPowUp: 1
+  pitcAccPowDown: 5
+  pitchingAccMax: 0.4
   resetBottom:
     minValue: -0.09660183
     maxValue: -0.042744175

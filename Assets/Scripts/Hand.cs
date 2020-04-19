@@ -184,6 +184,8 @@ public class Hand : MonoBehaviour
             {
                 AudioEvent audioEvent = collision.gameObject.GetComponentInChildren<AudioEvent>();
                 FindObjectOfType<SoundManager>().PlayCollision(audioEvent);
+                Renderer ren =collision.gameObject.GetComponentInChildren<Renderer>();
+                ren.material.color = new Color(ren.material.color.r, ren.material.color.g*1.3f, ren.material.color.b);
                
             }
            
