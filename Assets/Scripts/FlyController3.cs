@@ -51,6 +51,7 @@ public class FlyController3 : MonoBehaviour
 
     bool turnFly = false;
     public static bool grounded = false;
+    public Animator animator;
    
 
     void Awake()
@@ -132,13 +133,15 @@ public class FlyController3 : MonoBehaviour
         if (grounded)
         {
             currentStamina = Mathf.Clamp(currentStamina + Time.unscaledDeltaTime / staminaChargeTime, 0, 1);
+            animator.SetInteger("FlyState", 0);
         }
         else
         {
             currentStamina -= Time.unscaledDeltaTime / staminaFlyTime;
-
+            animator.SetInteger("FlyState", 2);
             if(currentStamina < 0.03f)
             {
+                animator.SetInteger("FlyState", 0);
                 currentStamina = 0;
             }
         }
