@@ -167,6 +167,7 @@ public class Hand : MonoBehaviour
             List<ContactPoint> contactPoints = new List<ContactPoint>();
             collision.GetContacts(contactPoints);
             bool play = false;
+            /*
             foreach (ContactPoint c in contactPoints)
             {
                 if (c.thisCollider.gameObject.tag == "AudioCollider")
@@ -176,7 +177,7 @@ public class Hand : MonoBehaviour
                     break;
                 }
             }
-
+            */
             if (play)
             {
                 AudioEvent audioEvent = collision.gameObject.GetComponentInChildren<AudioEvent>();
