@@ -140,8 +140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4185e996d252f6e499285a8e37fd2d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pitchingVelPower: 4.2
-  pitchingAccPower: 2.8
+  pitchingVelPower: 9.2
+  pitchingAccPower: 6
   resetBottom:
     minValue: -0.09660183
     maxValue: -0.042744175
