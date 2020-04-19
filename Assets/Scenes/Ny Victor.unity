@@ -4709,8 +4709,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collisionVoices: []
-  numCollVoices: 4
+  numCollVoices: 8
   colIndex: 0
+  firstPlay: 1
+  cooldownTime: 5
 --- !u!114 &1761687456
 MonoBehaviour:
   m_ObjectHideFlags: 0

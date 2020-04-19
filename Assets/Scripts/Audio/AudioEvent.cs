@@ -24,12 +24,12 @@ public class AudioEvent: MonoBehaviour
         voice = GetComponent<AudioSource>();
     }
 
-    public void PlaySound()
+    public void PlaySound(int index)
     {
         if (!voice.isPlaying)
         {
-            selectedFile = Random.Range(0, sound.Length);
-            voice.clip = sound[selectedFile].soundFile;
+            //selectedFile = Random.Range(0, sound.Length);
+            voice.clip = sound[index].soundFile;
 
             if (sound[selectedFile].enableParameters == true)
             {
@@ -47,6 +47,10 @@ public class AudioEvent: MonoBehaviour
     public void StopSound()
     {
         voice.Stop();
+    }
+    public bool isPlaying()
+    {
+        return voice.isPlaying;
     }
     public void PlayTheSound(AudioSource audioSource)
     {
