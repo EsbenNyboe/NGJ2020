@@ -34,12 +34,14 @@ public class Hand : MonoBehaviour
     Transform restPos;
     public Animator animator;
    public bool resetting;
+    GameManager gameManager;
 
     
    
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         hand = gameObject.GetComponent<Transform>();
         spine = GameObject.FindObjectOfType<Spine>().GetComponent<Transform>();
         target = GameObject.FindObjectOfType<Target>().GetComponent<Transform>();
@@ -178,11 +180,14 @@ public class Hand : MonoBehaviour
                 }
             }
             
-            if (play)
+            if (play && gameManager.AddToScore(collision)) //and add to score
             {
                 AudioEvent audioEvent = collision.gameObject.GetComponentInChildren<AudioEvent>();
                 FindObjectOfType<SoundManager>().PlayCollision(audioEvent);
+               
             }
+           
+            
         }
 
 
@@ -305,6 +310,7 @@ public class Hand : MonoBehaviour
 
         yield return new WaitForSeconds((cooldownTime / attackTimeModifier) * scale);
         coolDown = false;
+        swatSpeed = 1;
     }
 
 }
