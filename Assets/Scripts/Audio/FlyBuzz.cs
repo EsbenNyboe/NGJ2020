@@ -152,8 +152,6 @@ public class FlyBuzz : MonoBehaviour
             accXY = acc.z;
         }
 
-        Debug.Log("accXY:" + accXY);
-
         if (accXY == 0)
         {
             pitchingAcc = Mathf.Lerp(pitchingAcc, accXY, pitcAccPowDown * 0.01f);
