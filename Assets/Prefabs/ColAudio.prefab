@@ -48,15 +48,15 @@ MonoBehaviour:
   - soundFile: {fileID: 8300000, guid: 9a2eaecb0134d5443ac7b73b18272577, type: 3}
     enableParameters: 1
     pitch:
-      minValue: 0.7071259
+      minValue: 0.982988
       maxValue: 1.0133045
-    volume: 1
-  - soundFile: {fileID: 8300000, guid: 715088d4332d1f642ba3028902b1ecdc, type: 3}
+    volume: 0.405
+  - soundFile: {fileID: 8300000, guid: 9a2eaecb0134d5443ac7b73b18272577, type: 3}
     enableParameters: 1
     pitch:
-      minValue: 0.7071259
-      maxValue: 1.0133045
-    volume: 1
+      minValue: 0.9773962
+      maxValue: 1.0044233
+    volume: 0.031
 --- !u!82 &8086282187603672661
 AudioSource:
   m_ObjectHideFlags: 0
@@ -68,7 +68,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

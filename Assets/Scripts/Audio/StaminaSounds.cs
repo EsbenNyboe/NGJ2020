@@ -44,7 +44,7 @@ public class StaminaSounds : MonoBehaviour
             timeOuts[i] += Time.deltaTime * 10;
         }
 
-        rechargingPitcher = Mathf.Lerp(rechargingPitcher, FlyController2.currentStamina*staminaPitchPower, staminaPitchSmooth);
+        rechargingPitcher = Mathf.Lerp(rechargingPitcher, FlyController3.currentStamina*staminaPitchPower, staminaPitchSmooth);
         voiceC.pitch = staminaRecharging.pitch + rechargingPitcher;
 
         //        PlayAlertSound();
@@ -55,7 +55,7 @@ public class StaminaSounds : MonoBehaviour
 
     private void PlayAlertSound()
     {
-        if (FlyController2.grounded == false && FlyController2.currentStamina < 0.4f && voiceA.isPlaying == false && timeOuts[0] > 3)
+        if (FlyController3.grounded == false && FlyController3.currentStamina < 0.4f && voiceA.isPlaying == false && timeOuts[0] > 3)
         {
             timeOuts[0] = 0;
             voiceA.pitch = staminaLow.pitch;
@@ -67,7 +67,7 @@ public class StaminaSounds : MonoBehaviour
 
     private void PlayDepletionSound()
     {
-        if (FlyController2.grounded == false && FlyController2.currentStamina == 0 && voiceB.isPlaying == false && timeOuts[1] > 3)
+        if (FlyController3.grounded == false && FlyController3.currentStamina == 0 && voiceB.isPlaying == false && timeOuts[1] > 3)
         {
             timeOuts[1] = 0;
             voiceA.Stop();
@@ -80,7 +80,7 @@ public class StaminaSounds : MonoBehaviour
 
     private void PlayRechargingSound()
     {
-        if (FlyController2.grounded == true && FlyController2.currentStamina < 0.9f && voiceC.isPlaying == false)
+        if (FlyController3.grounded == true && FlyController3.currentStamina < 0.9f && voiceC.isPlaying == false)
         {
             voiceB.Stop();
             voiceC.clip = staminaRecharging.soundFile;
@@ -90,11 +90,11 @@ public class StaminaSounds : MonoBehaviour
 
     private void SwitchingStatesSmoothlyRechargingSound()
     {
-        if (voiceC.volume < staminaRecharging.volume && FlyController2.grounded == true && FlyController2.currentStamina < 0.9f)
+        if (voiceC.volume < staminaRecharging.volume && FlyController3.grounded == true && FlyController3.currentStamina < 0.9f)
         {
             voiceC.volume += fadeSlope;
         }
-        if (voiceC.volume > 0 && (FlyController2.grounded == false || FlyController2.currentStamina > 0.9f))
+        if (voiceC.volume > 0 && (FlyController3.grounded == false || FlyController3.currentStamina > 0.9f))
         {
             voiceC.volume -= fadeSlope;
         }

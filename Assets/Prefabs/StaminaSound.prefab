@@ -181,12 +181,12 @@ MonoBehaviour:
   staminaDepleted:
     soundFile: {fileID: 8300000, guid: 607d3fd6ab403dd4abe713802120b902, type: 3}
     pitch: 1
-    volume: 1
+    volume: 0.861
   staminaDepletedTO: 1
   staminaRecharging:
     soundFile: {fileID: 8300000, guid: 67721a046cd79a548a573ed8f517ebc2, type: 3}
     pitch: 1.102
-    volume: 0.499
+    volume: 0.471
   staminaRechargingTO: 0.1
   fadeSlope: 0.04
   staminaPitchSmooth: 1

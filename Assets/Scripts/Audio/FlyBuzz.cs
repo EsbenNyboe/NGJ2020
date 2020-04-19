@@ -40,7 +40,6 @@ public class FlyBuzz : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("stam: " + FlyController2.currentStamina);
         timeSinceReset += Time.deltaTime * 10;
         MacroPitching();
         LimitPitchMinMaxValues(0.7f, 1.4f);
@@ -50,7 +49,7 @@ public class FlyBuzz : MonoBehaviour
         SwitchingStatesSmoothly(); // grounding and ungrounding smoothly
         audioSource.pitch = pitch;
 
-        switch(FlyController2.grounded)
+        switch(FlyController3.grounded)
         {
             case true:
                 if (isGrounded == false)
@@ -124,7 +123,7 @@ public class FlyBuzz : MonoBehaviour
 
     private void MacroPitching()
     {
-        vel = FlyController2.flyVelocity;
+        vel = FlyController3.flyVelocity;
 
         if (timeSinceReset < resetTime)
         {
@@ -141,7 +140,7 @@ public class FlyBuzz : MonoBehaviour
 
     private void MicroPitching()
     {
-        acc = FlyController2.flyAcceleration;
+        acc = FlyController3.flyAcceleration;
         if (acc.x > acc.y)
         {
             pitchingAcc = acc.x;

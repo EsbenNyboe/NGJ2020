@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class FlyController2 : MonoBehaviour
@@ -35,6 +36,7 @@ public class FlyController2 : MonoBehaviour
     [SerializeField]
     public float staminaFlyTime = 20f;
 
+
     public static float currentStamina = 1f;
     
     public Transform flyBody;
@@ -67,7 +69,6 @@ public class FlyController2 : MonoBehaviour
     void Update()
     {
 
-        print(grounded);
             
         HandleInput();
 
@@ -82,6 +83,8 @@ public class FlyController2 : MonoBehaviour
         {
             GetComponentInChildren<Renderer>().material.SetColor("_Color", Color.green);
         }
+
+        print(grounded);
     }
 
     private void HandleInput()
@@ -161,7 +164,6 @@ public class FlyController2 : MonoBehaviour
     {
 
         grounded = false;
-        
 
         for (int i = 0; i < 24; i++)
         {
@@ -174,13 +176,16 @@ public class FlyController2 : MonoBehaviour
                 dir = new Vector3(0, -yangle, xangle);
             }
 
-            if(Physics.Raycast(transform.position, dir, out hit, 0.03f) && grounded == false)
+            if(Physics.Raycast(transform.position, dir, out hit, 0.04f) && grounded == false)
             {
                 //print(hit.normal*100);
 
                 landedForward = cam.transform.forward;
 
-                grounded = true;
+                if (!leaveGround)
+                {
+                    grounded = true;
+                }
             }
         }
     }
@@ -240,9 +245,16 @@ public class FlyController2 : MonoBehaviour
 
         if (leaveGround)
         {
-            velocity += hit.normal*Time.unscaledDeltaTime*100;
-            leaveGround = false;
+            velocity += hit.normal*Time.unscaledDeltaTime*10;
+            StartCoroutine(WaitAfterGrounded());
         }
+    }
+
+    IEnumerator WaitAfterGrounded()
+    {
+        yield return new WaitForSeconds(0.5f);
+        leaveGround = false;
+        grounded = false;
     }
 
     private void CalculateXZVelocity(float accelerationScaled, Vector3 zAxis, Vector3 xAxis, float currentXVelocity, float currentZVelocity)

@@ -32,6 +32,7 @@ public class Hand : MonoBehaviour
     public float cooldownTime;
     Projector shadow;
     Transform restPos;
+    public Animator animator;
    public bool resetting;
 
     
@@ -60,11 +61,13 @@ public class Hand : MonoBehaviour
         
         if (resetting)
         {
+            animator.SetInteger("HandState", 3);
             //hand.right = (hand.position - lastFramePos);
             t += swatSpeed * attackTimeModifier * Time.unscaledDeltaTime;
             hand.position = BezierCurve(startPos, restPos.position, t * t);
             if(Vector3.Distance(restPos.position, hand.position) < 0.3f)
             {
+                animator.SetInteger("HandState", 0);
                 resetting = false;
             }
         }
@@ -81,10 +84,11 @@ public class Hand : MonoBehaviour
                 spine.rotation = Quaternion.RotateTowards(spine.rotation, newRotation, step);
                 if (!coolDown)
                     LiftArm();
+                
             }
             if (swat)
             {
-               
+                animator.SetInteger("HandState", 2);
                 hand.right = -(hand.position - lastFramePos);
 
                 //homing until within certain distance
@@ -138,12 +142,14 @@ public class Hand : MonoBehaviour
         lastFrameTargetPos = target.position;
         
     }
+    
     public void OnCollisionEnter(Collision collision)
     {
+
       
         if (collision.gameObject.isStatic && !resetting && reachedTarget)
         {
-            print("collisiop");
+           
             t = 0;
             resetting = true;
             startPos = hand.position;
@@ -156,10 +162,27 @@ public class Hand : MonoBehaviour
         }
         if (collision.gameObject.GetComponentInChildren<AudioEvent>() != null && collision.gameObject.tag =="Collision")
         {
-            print("audio collision detected");
-       
-            AudioEvent audioEvent = collision.gameObject.GetComponentInChildren<AudioEvent>();
-            FindObjectOfType<SoundManager>().PlayCollision(audioEvent);
+            
+
+            List<ContactPoint> contactPoints = new List<ContactPoint>();
+            collision.GetContacts(contactPoints);
+            bool play = false;
+            
+            foreach (ContactPoint c in contactPoints)
+            {
+                if (c.thisCollider.gameObject.tag == "AudioCollider")
+                {
+                    print("audio collision detected");
+                    play = true;
+                    break;
+                }
+            }
+            
+            if (play)
+            {
+                AudioEvent audioEvent = collision.gameObject.GetComponentInChildren<AudioEvent>();
+                FindObjectOfType<SoundManager>().PlayCollision(audioEvent);
+            }
         }
 
 
@@ -209,8 +232,8 @@ public class Hand : MonoBehaviour
     Vector3 BezierCurve3(Vector3 a, Vector3 d, float t) // kan optimereres
     {
 
-        Vector3 b = a + 0.5f * Vector3.left;
-        Vector3 c = d + 0.5f * Vector3.left;
+        Vector3 b = a - 0.5f * Vector3.left;
+        Vector3 c = d - 0.5f * Vector3.left;
 
         Vector3 m = Vector3.Lerp(a, b, t);
         Vector3 n = Vector3.Lerp(b, c, t);
@@ -240,6 +263,7 @@ public class Hand : MonoBehaviour
     }
     void LiftArm()
     {
+        animator.SetInteger("HandState", 1);
         Vector3 readyDirNorm;
         if (!swat)
         {
