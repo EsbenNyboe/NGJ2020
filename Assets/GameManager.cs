@@ -28,6 +28,12 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
+    public void Update()
+    {
+        Debug.Log(score);
+    }
+
     public bool AddToScore(Collision other)
     {
         bool result = false;

@@ -9,7 +9,7 @@ public class beans : MonoBehaviour
     {
         foreach (Transform t in gameObject.GetComponentsInChildren<Transform>())
         {
-            print(t.name);
+//            print(t.name);
             RaycastHit hit;
             if (Physics.Raycast(t.position, t.TransformDirection(Vector3.down), out hit, 5f))
             {
@@ -20,7 +20,7 @@ public class beans : MonoBehaviour
                 {
                     col.enabled = false;
 
-                    print(hit.transform.gameObject.name + " hit");
+//                    print(hit.transform.gameObject.name + " hit");
                     t.position = hit.point + (Vector3.up * 0.005f);
                    // col.enabled = true;
 
