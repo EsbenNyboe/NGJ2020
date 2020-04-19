@@ -177,7 +177,7 @@ public class Hand : MonoBehaviour
                 {
                     if (c.thisCollider.gameObject.tag == "AudioCollider")
                     {
-                        print("audio collision detected");
+                       //print("audio collision detected");
                         play = true;
                         break;
                     }
