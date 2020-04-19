@@ -172,14 +172,16 @@ public class Hand : MonoBehaviour
             
             foreach (ContactPoint c in contactPoints)
             {
-                
-                if(c.thisCollider.gameObject.tag != null || c.thisCollider.gameObject != null)
+                if (c.thisCollider != null)
                 {
-                    if (c.thisCollider.gameObject.tag == "AudioCollider")
+                    if (c.thisCollider.gameObject.tag != null || c.thisCollider.gameObject != null)
                     {
-                       //print("audio collision detected");
-                        play = true;
-                        break;
+                        if (c.thisCollider.gameObject.tag == "AudioCollider")
+                        {
+                            //print("audio collision detected");
+                            play = true;
+                            break;
+                        }
                     }
                 }
             }
