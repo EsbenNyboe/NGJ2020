@@ -33,12 +33,10 @@ public class SoundManager : MonoBehaviour
         {
             audioEvent.PlaySound(0);
             StartCoroutine(CoolDownCoroutine());
-            Debug.Log("play0");
         }
         else
         {
             audioEvent.PlaySound(1);
-            Debug.Log("play1");
         }
                 
 

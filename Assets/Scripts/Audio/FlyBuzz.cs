@@ -40,7 +40,6 @@ public class FlyBuzz : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("stam: " + FlyController3.currentStamina);
         timeSinceReset += Time.deltaTime * 10;
         MacroPitching();
         LimitPitchMinMaxValues(0.7f, 1.4f);
