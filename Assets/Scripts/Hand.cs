@@ -173,7 +173,7 @@ public class Hand : MonoBehaviour
             foreach (ContactPoint c in contactPoints)
             {
                 
-                if(c.thisCollider.gameObject.tag != null)
+                if(c.thisCollider.gameObject.tag != null || c.thisCollider.gameObject != null)
                 {
                     if (c.thisCollider.gameObject.tag == "AudioCollider")
                     {
