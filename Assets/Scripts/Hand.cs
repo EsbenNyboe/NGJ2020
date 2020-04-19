@@ -67,6 +67,7 @@ public class Hand : MonoBehaviour
             hand.position = BezierCurve(startPos, restPos.position, t * t);
             if(Vector3.Distance(restPos.position, hand.position) < 0.3f)
             {
+                animator.SetInteger("HandState", 0);
                 resetting = false;
             }
         }
