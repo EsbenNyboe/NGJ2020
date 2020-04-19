@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
+    public static bool deathSound;
     public static bool godMode;
     public bool godModeEnabled;
     public List<GameObject> wreckedObjects;
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
     {
         if(!godMode)
         {
+            deathSound = true;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
