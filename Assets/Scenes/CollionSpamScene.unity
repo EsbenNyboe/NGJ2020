@@ -4711,6 +4711,8 @@ MonoBehaviour:
   collisionVoices: []
   numCollVoices: 4
   colIndex: 0
+  firstPlay: 1
+  cooldownTime: 5
 --- !u!114 &1761687456
 MonoBehaviour:
   m_ObjectHideFlags: 0

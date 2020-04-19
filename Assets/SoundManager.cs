@@ -16,8 +16,11 @@ public class SoundManager : MonoBehaviour
     }
     public void PlayCollision(AudioEvent audioEvent)
     {
+        print("collision sound playing");
+        print(audioEvent.gameObject.name);
+
         colIndex++;
-        if (colIndex == numCollVoices)
+        if (colIndex == numCollVoices - 1)
             colIndex = 0;
 
         collisionVoices[colIndex] = audioEvent;
@@ -30,10 +33,12 @@ public class SoundManager : MonoBehaviour
         {
             audioEvent.PlaySound(0);
             StartCoroutine(CoolDownCoroutine());
+            Debug.Log("play0");
         }
         else
         {
             audioEvent.PlaySound(1);
+            Debug.Log("play1");
         }
                 
 
@@ -43,7 +48,6 @@ public class SoundManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
     bool checkIfNoOneIsPlaying()
     {
