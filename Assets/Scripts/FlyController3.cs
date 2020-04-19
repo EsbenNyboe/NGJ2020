@@ -63,8 +63,7 @@ public class FlyController3 : MonoBehaviour
 
     void Update()
     {
-        print(grounded);
-        print(currentStamina);
+        
 
         HandleInput();
 
