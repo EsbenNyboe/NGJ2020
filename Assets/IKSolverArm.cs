@@ -23,6 +23,9 @@ public class IKSolverArm : MonoBehaviour
     [HideInInspector]
     public Vector3 homePosOffset;
 
+    public Transform hand;
+    Vector3 startOffset;
+
     public int joint1Vert_min;
     public int joint1Vert_max;
 
@@ -40,7 +43,13 @@ public class IKSolverArm : MonoBehaviour
     private void Start()
     {
         xRots = new float[legNum];
+        startOffset = endPoint.transform.position - hand.position;
         
+    }
+
+    private void Update()
+    {
+        //endPoint.transform.position = hand.position;
     }
 
     private void FixedUpdate()
@@ -80,7 +89,7 @@ public class IKSolverArm : MonoBehaviour
 
         thisJoint.transform.localRotation = Quaternion.Euler(0, 0, xRots[integer]);
 
-        print(xRots[integer]);
+        
     }
 
     private void MoveHorizontal()

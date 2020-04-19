@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class FlyController2 : MonoBehaviour
+public class FlyController3 : MonoBehaviour
 {
 
     public enum AccelerationType
@@ -10,10 +10,6 @@ public class FlyController2 : MonoBehaviour
         noAcc, constAcc, LinAccBoost, QuadAccBoost
     }
 
-    //grounded på loft - hvad gør space?
-
-    //grounded orientering.
-    public Transform test;
 
     [SerializeField, Range(0f, 10f)]
     float maxSpeed = 0.10f;
@@ -38,9 +34,9 @@ public class FlyController2 : MonoBehaviour
 
 
     public static float currentStamina = 1f;
-    
+
     public Transform flyBody;
-    
+
     public static Vector3 flyAcceleration, flyVelocity;
 
     public static float speed = 0;
@@ -56,7 +52,7 @@ public class FlyController2 : MonoBehaviour
 
     bool turnFly = false;
     public static bool grounded = false;
-    bool leaveGround = false;
+   
 
     void Awake()
     {
@@ -69,14 +65,13 @@ public class FlyController2 : MonoBehaviour
     void Update()
     {
 
-        
-            
+
         HandleInput();
 
         speed = body.velocity.magnitude;
         flyVelocity = body.velocity;
 
-        if(currentStamina == 0)
+        if (currentStamina == 0)
         {
             GetComponentInChildren<Renderer>().material.SetColor("_Color", Color.red);
         }
@@ -101,9 +96,9 @@ public class FlyController2 : MonoBehaviour
         {
             desiredVelocity = Vector3.zero;
         }
-        else if(currentStamina == 0)
+        else if (currentStamina == 0)
         {
-            desiredVelocity = 0.1f* new Vector3(playerInput.x, 0f, playerInput.y) * maxSpeed;
+            desiredVelocity = 0.1f * new Vector3(playerInput.x, 0f, playerInput.y) * maxSpeed;
         }
         else
         {
@@ -114,10 +109,6 @@ public class FlyController2 : MonoBehaviour
         {
             jumpInput = Input.GetAxis("Jump");
 
-            if (grounded)
-            {
-                leaveGround = true;
-            }
         }
         else if (Input.GetKey(KeyCode.LeftControl))
         {
@@ -141,13 +132,14 @@ public class FlyController2 : MonoBehaviour
 
         if (grounded)
         {
-            currentStamina = Mathf.Clamp(currentStamina + Time.unscaledDeltaTime / staminaChargeTime,0,1);
-        }else
+            currentStamina = Mathf.Clamp(currentStamina + Time.unscaledDeltaTime / staminaChargeTime, 0, 1);
+        }
+        else
         {
             currentStamina = Mathf.Clamp(currentStamina - Time.unscaledDeltaTime / staminaFlyTime, 0, 1);
         }
 
-        
+
         Grounding();
 
         MoveSphere();
@@ -157,7 +149,7 @@ public class FlyController2 : MonoBehaviour
             forwardDir = Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up);
             transform.forward = forwardDir;
         }
-        
+
         UpdateState();
     }
 
@@ -166,29 +158,12 @@ public class FlyController2 : MonoBehaviour
 
         grounded = false;
 
-        for (int i = 0; i < 24; i++)
+        if (Physics.Raycast(transform.position, -Vector3.up, out hit, 0.04f) && grounded == false)
         {
-            float xangle = Mathf.Cos(i * 30*Mathf.PI*2/360);
-            float yangle = Mathf.Sin(i * 30 * Mathf.PI * 2 / 360);
-            
-            Vector3 dir = new Vector3(xangle, -yangle, 0);
-            if(i > 11)
-            {
-                dir = new Vector3(0, -yangle, xangle);
-            }
-
-            if(Physics.Raycast(transform.position, dir, out hit, 0.04f) && grounded == false)
-            {
-                //print(hit.normal*100);
-
-                landedForward = cam.transform.forward;
-
-                if (!leaveGround)
-                {
-                    grounded = true;
-                }
-            }
+            grounded = true;
         }
+
+
     }
 
     private void UpdateState()
@@ -244,19 +219,8 @@ public class FlyController2 : MonoBehaviour
 
         }
 
-        if (leaveGround)
-        {
-            velocity += hit.normal*Time.unscaledDeltaTime*10;
-            StartCoroutine(WaitAfterGrounded());
-        }
     }
 
-    IEnumerator WaitAfterGrounded()
-    {
-        yield return new WaitForSeconds(0.5f);
-        leaveGround = false;
-        grounded = false;
-    }
 
     private void CalculateXZVelocity(float accelerationScaled, Vector3 zAxis, Vector3 xAxis, float currentXVelocity, float currentZVelocity)
     {
@@ -276,7 +240,7 @@ public class FlyController2 : MonoBehaviour
     {
         //float cameraAngleCompensation = Vector3.Cross(cam.transform.forward, transform.forward).magnitude;
 
-        if (jumpInput != 0  && currentStamina != 0)
+        if (jumpInput != 0 && currentStamina != 0)
         {
             velocity.y = Mathf.MoveTowards(velocity.y, Mathf.Clamp(jumpInput, -1, 1) * maxYSpeed, Time.unscaledDeltaTime * Yacceleration * 10f);
         }
@@ -286,9 +250,9 @@ public class FlyController2 : MonoBehaviour
             //
             velocity.y += 0.1f * (Mathf.PerlinNoise(68, 562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
 
-            if(currentStamina == 0)
+            if (currentStamina == 0)
             {
-            velocity.y -= Time.unscaledDeltaTime * 4 + 0.1f*(Mathf.PerlinNoise(68, 1562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
+                velocity.y -= Time.unscaledDeltaTime * 4 + 0.1f * (Mathf.PerlinNoise(68, 1562 + Time.time * 5000 * Time.unscaledDeltaTime) - 0.5f);
             }
             else
             {
@@ -329,20 +293,20 @@ public class FlyController2 : MonoBehaviour
         {
             Vector3 newForward = Vector3.ProjectOnPlane(landedForward, hit.normal);
             Quaternion landedOrientation = Quaternion.LookRotation(newForward, hit.normal); //mærkelig "forward" fordi fluen vender mærkeligt (langs +x)
-            
-            
-            
+
+
+
             //print(hit.normal);
             //test.transform.rotation = landedOrientation;
 
-            //desiredAngleX = landedOrientation.eulerAngles.x;
-            //desiredAngleY = body.transform.localRotation.y - 90;
-            //desiredAngleZ = landedOrientation.eulerAngles.z;
+            desiredAngleX = landedOrientation.eulerAngles.x;
+            desiredAngleY = body.transform.localRotation.y;
+            desiredAngleZ = landedOrientation.eulerAngles.z;
 
             //Debug.DrawRay(transform.position, hit.normal, Color.black);
             //Debug.DrawRay(transform.position, landedForward, Color.yellow);
             //body.transform.LookAt(body.position + newForward, hit.normal);
-            body.transform.localRotation = landedOrientation;
+            //body.transform.localRotation = landedOrientation;
 
         }
         else
@@ -354,7 +318,7 @@ public class FlyController2 : MonoBehaviour
 
         float newXrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.x, desiredAngleZ, Time.unscaledDeltaTime * 80);
         float newZrotation = Mathf.MoveTowardsAngle(flyBody.transform.localRotation.eulerAngles.z, desiredAngleX, Time.unscaledDeltaTime * 80);
-       
+
         flyBody.transform.localRotation = Quaternion.Euler(newXrotation, desiredAngleY, newZrotation);
     }
 
@@ -392,7 +356,7 @@ public class FlyController2 : MonoBehaviour
             xDiff = 0;
         }
 
-        yDiff = jumpInput*maxYSpeed - velocity.y;
+        yDiff = jumpInput * maxYSpeed - velocity.y;
 
         if (desiredVelocity.y == 0)
         {
