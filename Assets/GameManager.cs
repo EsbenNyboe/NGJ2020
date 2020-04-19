@@ -6,6 +6,14 @@ public class GameManager : MonoBehaviour
 {
     public static bool godMode;
     public bool godModeEnabled;
+    public List<GameObject> wreckedObjects;
+    public int score;
+
+    public void Start()
+    {
+        wreckedObjects = new List<GameObject>();
+        score = 0;
+    }
     public void Awake()
     {
      
@@ -19,6 +27,17 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
+    }
+    public bool AddToScore(Collision other)
+    {
+        bool result = false;
+        if (!wreckedObjects.Contains(other.gameObject))
+        {
+            score++;
+            wreckedObjects.Add(other.gameObject);
+            result = true;
+        }
+        return result;
     }
 
 }
