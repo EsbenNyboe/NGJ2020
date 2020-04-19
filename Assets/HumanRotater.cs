@@ -16,14 +16,11 @@ public class HumanRotater : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // The step size is equal to speed times frame time.
-        var step = rotationSpeed * attackTimeModifier * Time.unscaledDeltaTime;
+        Vector3 dir = target.position - transform.position;
+        dir.y = 0; // keep the direction strictly horizontal
+        Quaternion rot = Quaternion.LookRotation(dir);
+        // slerp to the desired rotation over time
+        transform.rotation = Quaternion.Slerp(transform.rotation, rot, rotationSpeed * Time.unscaledDeltaTime*attackTimeModifier);
 
-        Quaternion newRotation = Quaternion.LookRotation( -target.position-transform.position);
-        // Rotate our transform a step closer to the target's.
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, step);
-       
-        
-        
     }
 }
