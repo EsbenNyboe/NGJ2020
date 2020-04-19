@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Static
   - Collision
+  - AudioCollider
   layers:
   - Default
   - TransparentFX
